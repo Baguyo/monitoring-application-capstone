@@ -1,0 +1,33 @@
+@import '../../node_modules/bootstrap';
+@import '../../node_modules/admin-lte/dist/css/adminlte.css';
+
+
+@import '../../node_modules/@sweetalert2/theme-bootstrap-4/bootstrap-4.min.css';
+
+@import '../../node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css';
+/* @import '../../node_modules/datatables.net-select-dt/css/select.dataTables.min.css'; */
+
+@import '../../node_modules/datatables.net-select-bs4/css/select.bootstrap4.min.css';
+
+/* @import '../../node_modules/jquery-datatables-checkboxes/css/dataTables.checkboxes.css';  */
+
+.c-white{
+    color: #fff;
+}
+
+.sidebar  .nav-item .nav-link{
+    color:#fff;
+
+    transition: all 0.9s ease;
+    
+}
+.sidebar .nav-item .nav-link:hover{
+    color: #fff!important;
+    background:  linear-gradient(to top, #ff6767 , #b31837);
+    
+}
+
+.sidebar .nav-item .nav-link.active{
+    /* background-color: #BB0C2F; */
+    background:  linear-gradient(to top, #ff6767 , #b31837);
+}
