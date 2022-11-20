@@ -9,6 +9,7 @@ use App\Http\Requests\UpdateAdministrator;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
@@ -30,8 +31,13 @@ class AdministratorController extends Controller
     public function index()
     {
         $administrator = Cache::remember('allAdmin', 60 , function(){
-            return User::where('type', '=', '1')->get();
+            // return User::where('type', '=', '1')->get();
+            return DB::table('users')
+                        ->select(['*'])
+                        ->where('type', '=', '1')->get();
         });
+
+        // dd($administrator);
         return view('admin.administrator.index', ['administrator'=>$administrator]);
     }
 

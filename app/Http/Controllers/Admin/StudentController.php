@@ -43,7 +43,8 @@ class StudentController extends Controller
         //                 ->with(['section'=> fn($q) => $q->withTrashed()->with(['yearLevel' => fn($s) => $s->withTrashed()])  ])
         //                 ->with(['qr_code'=> fn($q) => $q->withTrashed()])
         //                 ->get();
-        $students = DB::table('students')
+        $students = Cache::remember('allStudents', 60, function(){
+            return DB::table('students')
                         // ->select('students.id', 'students.name', 'students.email')
                         ->join('qr_codes', 'qr_codes.student_id', 'students.id')
                         ->join('sections', 'sections.id', 'students.section_id')    
@@ -62,6 +63,7 @@ class StudentController extends Controller
                         'sections.name as section_name', 'year_levels.level as year_level' )
                         ->get();
 
+        });
         // dd($students);
 
         return view('admin.student.index', ['students'=>$students]);

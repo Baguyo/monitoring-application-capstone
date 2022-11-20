@@ -7,6 +7,7 @@ use App\Http\Requests\StoreYearLevel;
 use App\Models\YearLevel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class YearLevelController extends Controller
@@ -26,8 +27,11 @@ class YearLevelController extends Controller
     public function index()
     {
         $allYearLevel = Cache::remember('allYearLevel', 60, function(){
-            return YearLevel::withTrashed()->get();
+            // return YearLevel::withTrashed()->get();
+            return DB::table('year_levels')->select(['*'])->get();
         });
+
+        // dd($allYearLevel);
 
         return view('admin.year_level.index', ['allYearLevel'=>$allYearLevel]);
     }

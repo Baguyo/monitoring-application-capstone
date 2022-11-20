@@ -53,6 +53,12 @@ Route::group(['middleware'=> 'auth'], function(){
 
         Route::prefix('admin')->group(function(){
 
+            //STRANDS
+            Route::as('admin')->resource('strand', App\Http\Controllers\Admin\StrandsController::class);
+            //STRAND EXTRA ACTION
+            Route::post('strand/{strand}/restore', [App\Http\Controllers\Admin\StrandsController::class, 'restore'])->name('admin.strand.restore');
+            Route::post('strand/{strand}/fd', [App\Http\Controllers\Admin\StrandsController::class, 'forceDelete'])->name('admin.strand.forceDelete');
+
             //YEAR 
             Route::as('admin')->resource('year', App\Http\Controllers\Admin\YearLevelController::class);
             //YEAR EXTRA ACTION

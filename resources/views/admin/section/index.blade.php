@@ -33,10 +33,10 @@
                                 @forelse ($all_sections as $item)
                                     <tr>
 
-                                        @if ($item->trashed())
+                                        @if ($item->deleted_at)
 
                                             <td> <del>{{ $item->name }} </del></td>
-                                            <td> <del>{{ $item->yearLevel->level }} </del> </td>
+                                            <td> <del>{{ $item->level }} </del> </td>
                                             <td> <del>{{ $item->created_at }} </del> </td>
                                             <td> <del>{{ $item->updated_at }} </del></td>
                                             <td>
@@ -60,7 +60,7 @@
 
                                             
                                             <td> {{ $item->name }} </td>
-                                            <td> {{ $item->yearLevel->level }} </td>
+                                            <td> {{ $item->level }} </td>
                                             <td> {{ $item->created_at }} </td>
                                             <td> {{ $item->updated_at }} </td>
                                             <td>

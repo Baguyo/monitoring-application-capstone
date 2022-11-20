@@ -40,17 +40,18 @@
                                         <td> {{ $item->created_at }} </td>
                                         <td> {{ $item->updated_at }} </td>
                                         <td>
-                                            @can('update', $item)
-                                            <a href="{{ route('admin.users.edit', ['user'=>$item->id]) }}" class="btn btn-primary"> <i class="fas fa-pen-fancy"></i> </a>
-                                            /
-                                            <form action="{{ route('admin.users.destroy', ['user'=>$item->id]) }}" method="post" class="d-inline delete-user" >
-                                                @method('DELETE')
-                                                @csrf
-                                                <button type="submit" class="btn btn-danger">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </form>
-                                            @endcan 
+                                            @if ($item->id === Auth::user()->id)
+                                                <a href="{{ route('admin.users.edit', ['user'=>$item->id]) }}" class="btn btn-primary mr-2"> <i class="fas fa-pen-fancy"></i> </a>
+                                                
+                                                <form action="{{ route('admin.users.destroy', ['user'=>$item->id]) }}" method="post" class="d-inline delete-user" >
+                                                    @method('DELETE')
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-danger">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </form>    
+                                            @endif
+                                            
                                         </td>
                                     </tr>
 

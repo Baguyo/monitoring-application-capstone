@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreSection;
 use App\Models\Section;
+use App\Models\Strands;
 use App\Models\YearLevel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class SectionController extends Controller
@@ -27,9 +29,15 @@ class SectionController extends Controller
     public function index()
     {
         $all_sections = Cache::remember('allSections', 60, function(){
-            return Section::withTrashed()->with(['yearLevel'=> fn($q) => $q->withTrashed()])->get();
+            // return Section::withTrashed()->with(['yearLevel'=> fn($q) => $q->withTrashed()])->get();
+            return DB::table('sections')
+                    ->join('year_levels', 'year_levels.id', 'sections.year_level_id')
+                    ->select(['*'])->get();
+            
         });
+
         // dd($all_sections);
+        
         return view('admin.section.index', ['all_sections' => $all_sections]);
     }
 
@@ -41,9 +49,8 @@ class SectionController extends Controller
     public function create()
     {
         $all_year_level = YearLevel::all();
-
-
-        return view('admin.section.create', ['all_year_level'=>$all_year_level]);
+        $all_strands = Strands::all();
+        return view('admin.section.create', ['all_year_level'=>$all_year_level, 'all_strands'=>$all_strands]);
     }
 
     /**
@@ -57,12 +64,15 @@ class SectionController extends Controller
         $validatedData = $request->validated();
 
         $yL = YearLevel::findOrFail($validatedData['level']);
+        $strand = Strands::findOrFail($validatedData['strand']);
 
         $section = new Section();
 
         $section->name = $validatedData['section'];
 
-        $section->yearLevel()->associate($yL)->save();
+        $section->yearLevel()->associate($yL);
+        $section->strand()->associate($strand)->save();
+        
 
         return redirect()->route('admin.section.index')->with('status', "Section {$section->name} was successfully created");
     }

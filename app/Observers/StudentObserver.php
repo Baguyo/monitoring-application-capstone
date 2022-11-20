@@ -16,7 +16,7 @@ class StudentObserver
      */
     public function created(student $student)
     {
-        
+        Cache::forget('allStudents');
     }
 
     /**
@@ -27,7 +27,7 @@ class StudentObserver
      */
     public function updated(student $student)
     {
-        
+        Cache::forget('allStudents');
     }
 
     /**
@@ -38,7 +38,7 @@ class StudentObserver
      */
     public function deleted(student $student)
     {
-        
+        Cache::forget('allStudents');
         $student->qr_code()->delete();
     }
 
@@ -50,7 +50,7 @@ class StudentObserver
      */
     public function restored(student $student)
     {
-        
+        Cache::forget('allStudents');
         $student->qr_code()->onlyTrashed()->restore();
     }
 
@@ -62,7 +62,7 @@ class StudentObserver
      */
     public function forceDeleted(student $student)
     {
-        
+        Cache::forget('allStudents');
         $student->user()->delete();
         $student->monitoringRecord()->delete();
         // $qr_code = $student->qr_code()->withTrashed()->get();

@@ -45,17 +45,17 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->reportable(function (Throwable $e) {
-            //
-            if($e instanceof('\Illuminate\Database\QueryException')){
-                abort(500);
+        // $this->reportable(function (Throwable $e) {
+        //     //
+        //     if($e instanceof('\Illuminate\Database\QueryException')){
+        //         abort(500);
                 
-            }
-            elseif($e instanceof(ConnectionException::class) ){
-                abort(500);
-            }
+        //     }
+        //     elseif($e instanceof(ConnectionException::class) ){
+        //         abort(500);
+        //     }
             
-        });
+        // });
 
         
         

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreSection extends FormRequest
+class StoreStrands extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,7 @@ class StoreSection extends FormRequest
     public function rules()
     {
         return [
-            'strand' => 'bail|required|integer',
-            'level' => 'bail|required|integer',
-            'section' => 'bail|required|min:2',
+            'strand' => 'bail|required|min:3|max:10',
         ];
     }
 }

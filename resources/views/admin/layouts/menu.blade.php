@@ -7,6 +7,13 @@
 </li>
 
 <li class="nav-item">
+    <a href="{{ route('admin.strand.index') }}" class="nav-link {{ request()->route()->named('admin.strand*') ? 'active' : '' }}">
+        <i class="nav-icon fas fa-file"></i>
+        <p>Strands</p>
+    </a>
+</li>
+
+<li class="nav-item">
     <a href="{{ route('admin.year.index') }}" class="nav-link {{ request()->route()->named('admin.year*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-chart-bar"></i>
         <p>Grade Level</p>

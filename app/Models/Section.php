@@ -15,6 +15,10 @@ class Section extends Model
         'name',
     ];
 
+    public function strand(){
+        return $this->belongsTo('App\Models\Strands');
+    }
+
     public function yearLevel(){
         return $this->belongsTo('App\Models\YearLevel');
     }

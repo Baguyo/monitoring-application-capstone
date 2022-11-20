@@ -26,7 +26,12 @@ class MonitoringRecordsController extends Controller
     public function index()
     {
 
-        $year = YearLevel::with('sections')->get();
+        $year = 
+             YearLevel::select(['id','level'])->with('sections')->get();
+        
+
+        // dd($year);
+        // Cache::put('year',$year, 60);
         return view('admin.monitoringRecords.index', ['year'=> $year]);
     }
 

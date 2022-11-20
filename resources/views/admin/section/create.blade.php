@@ -22,6 +22,23 @@
                         <form action="{{ route('admin.section.store') }}" method="post">
                             @csrf
                             <div class="mb-3">
+
+                                <div class="mb-3">
+                                    <label for="" class="form-label font-weight-normal">Strand:</label>
+                                    <select class="form-select form-select-lg form-control" name="strand" id="">
+                                        <option selected value="">Select one</option>
+                                        @forelse ($all_strands as $item)
+                                            
+                                            <option value="{{ $item->id }}" @if (old('strand') == $item->id) selected @endif > {{ $item->name }} </option>
+                                        @empty
+                                            <option value="">No Strand</option>
+                                        @endforelse
+                                    </select>
+                                    @error('strand')
+                                        <p class="text-danger font-weight-bold">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
                                 <div class="mb-3">
                                     <label for="" class="form-label font-weight-normal">Grade Level:</label>
                                     <select class="form-select form-select-lg form-control @error('level') is-invalid @enderror" name="level" id="" >
