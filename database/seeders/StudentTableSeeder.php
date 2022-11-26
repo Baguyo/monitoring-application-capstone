@@ -35,10 +35,13 @@ class StudentTableSeeder extends Seeder
             $qr_code = new QrCode();
             $image = FacadesQrCode::format('png')
                     ->eye('square')
-                    ->style('dot', 0.5)
-                    ->merge('\storage\app\public\defaults\logo.jpg', .3)
+                    ->eyeColor(0, 0, 17, 255, 0, 0, 0)
+                    ->eyeColor(1, 0, 17, 255, 0, 0, 0)
+                    ->eyeColor(2, 255, 17, 0, 0, 0, 0)
+                    ->merge('\storage\app\public\defaults\logo.png', .3)
                     ->errorCorrection('H')
-                    ->size(200)
+                    ->size(250)
+                    ->encoding('UTF-8')
                     ->generate( base64_encode($student->guardian) );
             $output_file = "Qr-code/{$student->user->name}.png";
 

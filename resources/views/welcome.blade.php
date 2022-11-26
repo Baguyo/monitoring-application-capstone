@@ -3,8 +3,8 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <title>Laravel</title>
+        <link rel="icon" href="{{Storage::url('defaults/logo.png')}}" type="image/icon type">
+        <title>Monitoring_system</title>
 
         <!-- Fonts -->
         <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
@@ -19,9 +19,102 @@
                 font-family: 'Nunito', sans-serif;
             }
         </style>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
+        integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog=="
+        crossorigin="anonymous"/>
+        @vite(['resources/js/app.js'])
     </head>
     <body class="antialiased">
-        <div class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center py-4 sm:pt-0">
+
+        <div class="container-fluid ">
+            <div class="row align-items-center vh-100" >
+                <div class="col-lg-8 col-md-7  d-none d-sm-none  d-md-block h-100 d-lg-flex d-md-flex justify-content-center align-items-center" style="background: linear-gradient(-45deg, #1C5BCF 50%, #F51434 50%)">
+                    <div class="mx-auto text-center">
+                        <img src="{{ Storage::url('defaults/logo.png') }}" alt="" width="260px">
+                        <h1 class="text-white">Monitoring system</h1>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-5 col-sm-12 my-auto ">
+                    <div class="card shadow" >
+                        <div class="card-header d-block d-sm-block d-md-none" style="background: linear-gradient(45deg, #1C5BCF 50%, #F51434 50%)">
+                            <div class="">
+                                <div class="mx-auto text-center">
+                                    <img src="{{ Storage::url('defaults/logo.png') }}" alt="">
+                                    <h1 class="text-white">Monitoring system</h1>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body login-card-body">
+                            
+                            <p class="login-box-msg">Login</p>
+                        @auth
+                            @if (Auth::user()->type === "admin")
+                                <a href="{{ route('admin.dashboard') }}" class="text-sm text-primary ">Dashboard</a>
+                            @else
+                            <a href="{{ route('user.dashboard') }}" class="text-sm text-primary">Dashboard</a>
+                            @endif
+                        @else
+                            
+                        @endauth
+                
+                            <form method="post" action="{{ url('/login') }}">
+                                @csrf
+                
+                                <div class="input-group mb-3">
+                                    <input type="email"
+                                           name="email"
+                                           value="{{ old('email') }}"
+                                           placeholder="Email"
+                                           class="form-control @error('email') is-invalid @enderror">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text"><span class="fas fa-envelope"></span></div>
+                                    </div>
+                                    @error('email')
+                                    <span class="error invalid-feedback">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                
+                                <div class="input-group mb-3">
+                                    <input type="password"
+                                           name="password"
+                                           placeholder="Password"
+                                           class="form-control @error('password') is-invalid @enderror">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-lock"></span>
+                                        </div>
+                                    </div>
+                                    @error('password')
+                                    <span class="error invalid-feedback">{{ $message }}</span>
+                                    @enderror
+                
+                                </div>
+                
+                                <div class="row">
+                                    <div class="col-8">
+                                        <div class="icheck-primary">
+                                            <input type="checkbox" id="remember">
+                                            <label for="remember">Remember Me</label>
+                                        </div>
+                                    </div>
+                
+                                    <div class="col-4">
+                                        <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                                    </div>
+                
+                                </div>
+                            </form>
+                
+                            <p class="mb-1">
+                                <a href="{{ route('password.request') }}">I forgot my password</a>
+                            </p>
+                        </div>
+                        <!-- /.login-card-body -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{-- <div class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center py-4 sm:pt-0">
             @if (Route::has('login'))
                 <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
                     @auth
@@ -131,6 +224,6 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
     </body>
 </html>

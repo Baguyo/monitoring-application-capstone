@@ -32,8 +32,11 @@ class SectionController extends Controller
             // return Section::withTrashed()->with(['yearLevel'=> fn($q) => $q->withTrashed()])->get();
             return DB::table('sections')
                     ->join('year_levels', 'year_levels.id', 'sections.year_level_id')
-                    ->select(['*'])->get();
-            
+                    ->join('strands', 'strands.id', 'sections.strands_id')
+                    ->select('sections.id as section_id', 'sections.name', 'sections.created_at', 'sections.updated_at',
+                            'sections.deleted_at',
+                        'year_levels.level as year_level',
+                        'strands.name as strand_name')->get();
         });
 
         // dd($all_sections);
@@ -71,7 +74,7 @@ class SectionController extends Controller
         $section->name = $validatedData['section'];
 
         $section->yearLevel()->associate($yL);
-        $section->strand()->associate($strand)->save();
+        $section->strands()->associate($strand)->save();
         
 
         return redirect()->route('admin.section.index')->with('status', "Section {$section->name} was successfully created");
@@ -98,13 +101,14 @@ class SectionController extends Controller
     {
         
 
-        $section_to_edit = Section::with('yearLevel')->findOrFail($id);
+        $section_to_edit = Section::with('yearLevel')->with('strands')->findOrFail($id);
 
         $yL = YearLevel::all()->except($section_to_edit->yearLevel->id);
+        $strands = Strands::all()->except($section_to_edit->strands->id);
 
         // dd($yL);
         
-        return view('admin.section.edit', ['all_year_level' => $yL, 'section_to_edit'=>$section_to_edit]);
+        return view('admin.section.edit', ['all_year_level' => $yL, 'section_to_edit'=>$section_to_edit, 'strands'=>$strands]);
     }
 
     /**
@@ -121,12 +125,11 @@ class SectionController extends Controller
 
         $section->name = $validatedData['section'];
         $section->year_level_id = $validatedData['level'];
+        $section->strands_id = $validatedData['strand'];
 
         $section->save();
 
-        return redirect()->route('admin.section.index')->with('status', "Section {$section->name} was successfully updated");
-
-        
+        return redirect()->route('admin.section.index')->with('status', "Section {$section->name} was successfully updated"); 
     }
 
     /**

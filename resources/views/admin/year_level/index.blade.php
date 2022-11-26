@@ -36,13 +36,13 @@
                                             <td><del>{{ $item->created_at }}</del></td>
                                             <td><del>{{ $item->updated_at }}</del></td>
                                             <td>
-                                                <form action="{{ route('admin.year.restore', ['year'=>$item->id]) }}" method="POST" class="d-inline hidden restore">
+                                                <form action="{{ route('admin.year.restore', ['year'=>$item->id]) }}" method="POST" class="d-inline hidden restore mr-2">
                                                     @csrf
                                                     <button type="submit" class="btn btn-success">
                                                         <i class="fas fa-recycle"></i>
                                                     </button>
                                                 </form>
-                                                /
+                                                
                                                 <form action="{{ route('admin.year.forceDelete', ['year'=>$item->id]) }}" method="post" class="d-inline f-delete" >
                                                     @csrf
                                                     <button type="submit" class="btn btn-danger">
@@ -58,8 +58,8 @@
                                             <td>{{ $item->created_at }}</td>
                                             <td>{{ $item->updated_at }}</td>
                                             <td>
-                                                <a href="{{ route('admin.year.edit', ['year'=>$item->id]) }}" class="btn btn-primary"> <i class="fas fa-pen-fancy"></i> </a>
-                                                /
+                                                <a href="{{ route('admin.year.edit', ['year'=>$item->id]) }}" class="btn btn-primary mr-2"> <i class="fas fa-pen-fancy"></i> </a>
+                                                
                                                 <form action="{{ route('admin.year.destroy', ['year'=>$item->id]) }}" method="post" class="d-inline delete" >
                                                     @method('DELETE')
                                                     @csrf

@@ -25,7 +25,7 @@ class SectionTableSeeder extends Seeder
         $yL->each(function($item) use($count_per_level, $strand) {
             Section::factory()->count($count_per_level)->make()->each(function($section) use($item, $strand) {
                 $section->year_level_id = $item->id;
-                $section->strand_id = $strand->random()->id;
+                $section->strands_id = $strand->random()->id;
                 $section->save();
             });
         });

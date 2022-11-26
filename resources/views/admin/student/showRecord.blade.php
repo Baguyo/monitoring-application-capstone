@@ -145,26 +145,7 @@
                 this.parentNode.submit();
             });
         
-            $('#level').change(function (e) { 
-                var level = this.value;
-                $('#section').html('');
-
-                var initial_url = '{{ route('admin.levels.section', ['level'=>0] ) }}';
-                var url = initial_url.replace('0', level);
-
-                $.ajax({
-                    type: "GET",
-                    url: url,
-                    success: function (response) {
-                        $("#section").append("<option value=''>--SELECT--</option>");
-                        $.each(response, function (key, value) { 
-                            
-                            $("#section").append("<option value='"+ value.id +"'   >"+ value.name +"</option>");
-                        });
-                    }
-                });
-            });
-
+           
         });
 
         

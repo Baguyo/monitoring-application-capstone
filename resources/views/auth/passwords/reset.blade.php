@@ -12,13 +12,15 @@
           integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog=="
           crossorigin="anonymous"/>
 
-    <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+          @vite(['resources/js/app.js'])
 
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
     <div class="login-logo">
-        <a href="{{ url('/home') }}"><b>{{ config('app.name') }}</b></a>
+        <img src="{{ Storage::url('defaults/logo.png') }}" alt="">
+        <br>
+        <a href="{{ url('/') }}"><b>Monitoring System</b></a>
     </div>
 
     <div class="card">
@@ -84,7 +86,7 @@
             </form>
 
             <p class="mt-3 mb-1">
-                <a href="{{ route('login') }}">Login</a>
+                <a href="{{ url('/') }}">Login</a>
             </p>
         </div>
         <!-- /.login-card-body -->

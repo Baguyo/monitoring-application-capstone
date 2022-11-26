@@ -16,7 +16,9 @@ class StudentObserver
      */
     public function created(student $student)
     {
-        Cache::forget('allStudents');
+        if(Cache::has('allStudents')){
+            Cache::forget('allStudents');
+        }
     }
 
     /**

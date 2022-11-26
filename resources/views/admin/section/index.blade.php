@@ -23,6 +23,7 @@
                                 <tr>
                                     
                                     <th>Name</th>
+                                    <th>Strand</th>
                                     <th>Grade level</th>
                                     <th>Date creation</th>
                                     <th>Date updation</th>
@@ -36,19 +37,20 @@
                                         @if ($item->deleted_at)
 
                                             <td> <del>{{ $item->name }} </del></td>
-                                            <td> <del>{{ $item->level }} </del> </td>
+                                            <td> <del>{{ $item->strand_name }} </del></td>
+                                            <td> <del>{{ $item->year_level }} </del> </td>
                                             <td> <del>{{ $item->created_at }} </del> </td>
                                             <td> <del>{{ $item->updated_at }} </del></td>
                                             <td>
                                                 
-                                                <form action="{{ route('admin.section.restore', ['section'=>$item->id]) }}" method="POST" class="d-inline hidden restore">
+                                                <form action="{{ route('admin.section.restore', ['section'=>$item->section_id]) }}" method="POST" class="d-inline hidden restore mr-2">
                                                     @csrf
                                                     <button type="submit" class="btn btn-success">
                                                         <i class="fas fa-recycle"></i>
                                                     </button>
                                                 </form>
-                                                    /
-                                                <form action="{{ route('admin.section.forceDelete', ['section'=>$item->id]) }}" method="post" class="d-inline f-delete" >
+                                                    
+                                                <form action="{{ route('admin.section.forceDelete', ['section'=>$item->section_id]) }}" method="post" class="d-inline f-delete" >
                                                     @csrf
                                                     <button type="submit" class="btn btn-danger">
                                                         <i class="fas fa-ban"></i>
@@ -60,14 +62,15 @@
 
                                             
                                             <td> {{ $item->name }} </td>
-                                            <td> {{ $item->level }} </td>
+                                            <td> {{ $item->strand_name }} </td>
+                                            <td> {{ $item->year_level }} </td>
                                             <td> {{ $item->created_at }} </td>
                                             <td> {{ $item->updated_at }} </td>
                                             <td>
                                                 
-                                                <a href="{{ route('admin.section.edit', ['section'=>$item->id]) }}" class="btn btn-primary"> <i class="fas fa-pen-fancy"></i> </a>
-                                                    /
-                                                    <form action="{{ route('admin.section.destroy', ['section'=>$item->id]) }}" method="post" class="d-inline delete" >
+                                                <a href="{{ route('admin.section.edit', ['section'=>$item->section_id]) }}" class="btn btn-primary mr-2"> <i class="fas fa-pen-fancy"></i> </a>
+                                                    
+                                                    <form action="{{ route('admin.section.destroy', ['section'=>$item->section_id]) }}" method="post" class="d-inline delete" >
                                                         @method('DELETE')
                                                         @csrf
                                                         <button type="submit" class="btn btn-danger">
@@ -108,6 +111,7 @@
 
     </div>
     <script type="module">
+        var table =  $('#section-table').DataTable();
          
         // var selectAll = $('.select-all');
         // var select = $('.select');

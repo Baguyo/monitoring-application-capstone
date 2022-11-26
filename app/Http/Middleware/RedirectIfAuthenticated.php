@@ -27,7 +27,7 @@ class RedirectIfAuthenticated
                 if(Auth::user()->type === 'admin'){
                     return redirect('admin_dashboard');
                 }elseif(Auth::user()->type === "user"){
-                    return redirect('user_dashboard');
+                    return redirect('user');
                 }
             }
         }

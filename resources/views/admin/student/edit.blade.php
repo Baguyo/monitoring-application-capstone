@@ -75,16 +75,34 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="" class="form-label font-weight-normal">Contact Number:</label>
-                                    <input type="tel" value="{{ old('contact_number', "+". $student->contact_number ?? "+63") }}" 
-                                      class="form-control @error('contact_number') is-invalid @enderror" name="contact_number" id="" aria-describedby="helpId" placeholder="">
-                                      @error('contact_number')
+
+                                    <label for="" class="form-label font-weight-normal">Contact Number</label>
+                                    <div class="input-group ">
+                                        <div class="input-group-prepend">
+                                          <span class="input-group-text" id="basic-addon1">+63</span>
+                                        </div>
+                                        <input type="tel" value="{{ old('contact_number', $student->contact_number) }}" 
+                                        class="form-control @error('contact_number') is-invalid @enderror" name="contact_number" id="" aria-describedby="helpId" placeholder="">
+                                    </div>
+                                    @error('contact_number')
+                                            <p class="text-danger font-weight-bold">{{ $message }}</p>
+                                        @enderror
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="" class="form-label font-weight-normal">Strand:</label>
+                                    <select class="form-select form-select-lg form-control @error('strand') is-invalid @enderror" name="strand" id="strand">
+                                        <option selected value="">Select one</option>
+                                        @forelse ($all_strands as $strand)
+                                            <option value="{{ $strand->id }}"> {{ $strand->name }} </option>
+                                        @empty
+                                            <option value="">No Strand</option>
+                                        @endforelse
+                                    </select>
+                                    @error('strand')
                                         <p class="text-danger font-weight-bold">{{ $message }}</p>
                                     @enderror
-                                        <p class="form-text text-muted">
-                                            format: +639100100101
-                                        </p>
-                                  </div>
+                                </div>
 
                                 <div class="mb-3">
                                     <label for="" class="form-label font-weight-normal">Grade Level:</label>
@@ -133,10 +151,14 @@
             
             $('#level').change(function (e) { 
                 var level = this.value;
+                var strand = $('#strand').val();
                 $('#section').html('');
 
-                var initial_url = '{{ route('admin.levels.section', ['level'=>0] ) }}';
+                var initial_url = '{{ route('admin.levels.section', ['level'=>0, 'strand'=>-1] ) }}';
                 var url = initial_url.replace('0', level);
+                url = url.replace('-1', strand);
+
+                
 
                 $.ajax({
                     type: "GET",
@@ -147,8 +169,6 @@
                             
                             $("#section").append("<option value='"+ value.id +"'   >"+ value.name +"</option>");
                         });
-
-                        // console.log(response);
                     }
                 });
 

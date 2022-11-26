@@ -18,7 +18,7 @@ class StudentFactory extends Factory
     {
         return [
             'guardian' => fake()->name(),
-            'contact_number' => fake()->numerify('###########'),
+            'contact_number' => '9754588991',
             'address'=> fake()->address()
         ];
     }

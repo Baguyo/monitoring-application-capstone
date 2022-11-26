@@ -9,6 +9,7 @@ use App\Models\Student;
 use App\Models\YearLevel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 
 class MonitoringRecordsController extends Controller
@@ -67,8 +68,21 @@ class MonitoringRecordsController extends Controller
         $validatedDate = $request->validated();
         // $student = Student::findOrFail($validatedDate['student']);
         
-        $student_records = MonitoringRecord::with('student.user')->with('student.section')->where('student_id', '=', $validatedDate['student'])
-        ->whereBetween('date', [$validatedDate['date-from'], $validatedDate['date-to']])->get();
+        // $student_records = MonitoringRecord::with('student.user')->with('student.section')->where('student_id', '=', $validatedDate['student'])
+        // ->whereBetween('date', [$validatedDate['date-from'], $validatedDate['date-to']])->get();
+
+        $student_records = DB::table('monitoring_records')
+                                ->join('students', 'students.id', 'monitoring_records.student_id')
+                                ->join('users', 'users.id', 'students.user_id')
+                                ->join('sections', 'sections.id', 'students.section_id')
+                                ->where('monitoring_records.student_id', '=', $validatedDate['student'])
+                                ->whereBetween('date', [$validatedDate['date-from'], $validatedDate['date-to']])
+                                ->select('users.name as user_name', 'sections.name as section_name', 'monitoring_records.date',
+                                        'monitoring_records.first_in', 'monitoring_records.first_out',
+                                        'monitoring_records.second_in', 'monitoring_records.second_out'
+                                )
+                                ->get();
+                                
         
 
         $year = YearLevel::with('sections')->get();
@@ -85,7 +99,6 @@ class MonitoringRecordsController extends Controller
       $student_records = MonitoringRecord::with('student.user')->with('student.section')->where('student_id', '=', $data[0])
         ->whereBetween('date', [$data[1], $data[2]])->get();
 
-    
         $headers = array(
             "Content-type" => "text/csv",
             "Content-Disposition" => "attachment; filename=monitoring-records.csv",

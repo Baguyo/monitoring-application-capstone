@@ -57,7 +57,9 @@ class YearLevelObserver
             $section->each(function($item){
             $student = $item->students()->withTrashed()->get();
             $student->each(function($st){
+                
                 Storage::disk('public')->delete($st->qr_code->path);
+                $st->user()->delete();
             });
         });
         }
@@ -120,4 +122,6 @@ class YearLevelObserver
     {
         
     }
+
+    //FIXING YEAR LEVEL FORCE DELETE USER MODEL MUST BE ALSO DELETED
 }

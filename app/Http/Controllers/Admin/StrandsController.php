@@ -85,7 +85,7 @@ class StrandsController extends Controller
         $strand->update([
             'name' => $validatedData['strand']
         ]);
-        return redirect()->route('admin.strandindex')->with('status', "Strand {$strand->name} was successfully updated");
+        return redirect()->route('admin.strand.index')->with('status', "Strand {$strand->name} was successfully updated");
         
     }
 

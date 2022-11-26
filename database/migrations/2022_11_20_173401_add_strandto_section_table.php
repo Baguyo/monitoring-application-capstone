@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('sections', function(Blueprint $table){
-            $table->unsignedBigInteger('strand_id')->after('year_level_id');
-            $table->foreign('strand_id')->references('id')->on('strands')->onDelete('cascade');
+            $table->unsignedBigInteger('strands_id')->after('year_level_id');
+            $table->foreign('strands_id')->references('id')->on('strands')->onDelete('cascade');
         });
     }
 
@@ -27,8 +27,8 @@ return new class extends Migration
     public function down()
     {
         Schema::table('sections', function(Blueprint $table){
-            $table->dropForeign(['strand_id']);
-            $table->dropColumn('strand_id');
+            $table->dropForeign(['strands_id']);
+            $table->dropColumn('strands_id');
         });
     }
 };
