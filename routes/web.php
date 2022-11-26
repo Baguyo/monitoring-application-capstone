@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('home');
 
 Route::get('/demo', function(){
     return view('demo.index');
@@ -40,7 +40,7 @@ Route::get('/demo', function(){
 
 
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::group(['middleware'=> 'auth'], function(){
 
@@ -75,7 +75,6 @@ Route::group(['middleware'=> 'auth'], function(){
 
             //STUDENT
             Route::as('admin')->resource('student', App\Http\Controllers\Admin\StudentController::class);
-            Route::get('students/record', [App\Http\Controllers\Admin\StudentController::class, 'showRecords'])->name('admin.student_records.show');
             //STUDENT EXTRA ACTION
             Route::post('student/{student}/r', [App\Http\Controllers\Admin\StudentController::class, 'restore'])->name('admin.student.restore');
             Route::post('student/{student}/fd', [App\Http\Controllers\Admin\StudentController::class, 'forceDelete'])->name('admin.student.forceDelete');
@@ -97,7 +96,7 @@ Route::group(['middleware'=> 'auth'], function(){
 
 
             //FETCH LEVEL'S SECTIONS
-            Route::get('/get-sections/{level}', [App\Http\Controllers\Admin\YearLevelController::class, 'getSection'])->name('admin.levels.section');
+            Route::get('/get-sections/{level}/{strand}', [App\Http\Controllers\Admin\YearLevelController::class, 'getSection'])->name('admin.levels.section');
             Route::get('/get-student/{section}', [App\Http\Controllers\Admin\SectionController::class, 'getStudents'])->name('admin.section.student');
         });
 
@@ -140,5 +139,5 @@ Route::group(['middleware'=> 'auth'], function(){
 
 
 
-Auth::routes();
+Auth::routes(['register'=>false]);
 

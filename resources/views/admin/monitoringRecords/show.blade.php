@@ -111,13 +111,13 @@
                                         <th>In</th>
                                         <th>Out</th>
                                     </tr>
-                                </thead>
+                                </thead>    
                                 
                                 @forelse ($records as $item)
                                     
                                 <tr>
-                                    <td>{{ $item->student->user->name }}</td>
-                                    <td>{{ $item->student->section->name }}</td>
+                                    <td>{{ $item->user_name }}</td>
+                                    <td>{{ $item->section_name }}</td>
                                     <td>{{ $item->date }}</td>
                                     <td>{{  ($item->first_in) ? date('h:i:A', strtotime($item->first_in)) : "" }}</td>
                                     <td>{{  ($item->first_out) ? date('h:i:A', strtotime($item->first_out)) : ""  }}</td>

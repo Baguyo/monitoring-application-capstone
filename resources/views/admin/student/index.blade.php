@@ -26,13 +26,14 @@
                     <table class="table table-hover table-bordered" id="student" style="font-size: 13px">
                         <thead>
                             <tr>
-                                <th>Deleted at</th>
+                                
                                 <th>QR code</th>    
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Guardian</th>
                                 <th>Address</th>
                                 <th>Contact Number</th>
+                                <th>Strand</th>
                                 <th>Year</th>
                                 <th>Section</th>
                                 <th>Action</th>
@@ -45,7 +46,7 @@
                                 <tr>
                                    
                                     @if ($item->student_deleted)
-                                        <td>{{ $item->student_deleted }}</td>
+                                        
                                         <td> 
                                             <img src="{{ Storage::url($item->qr_code_path) }}" alt="" height="68">
                                             <form action="{{ route('admin.student.qr_code', ['path'=>$item->qr_code_id]) }}" method="post">
@@ -58,6 +59,7 @@
                                         <td> <del>{{ $item->student_guardian }} </del></td>
                                         <td> <del>{{ $item->student_address }}  </del></td>
                                         <td> <del>{{ $item->student_contact_number }} </del></td>
+                                        <td> <del>{{ $item->strand_name }} </del></td>
                                         <td> <del>{{ $item->year_level }}   </del></td>
                                         <td> <del>{{ $item->section_name }} </del></td>
 
@@ -84,7 +86,7 @@
                                         </td>
                                         
                                     @else
-                                        <td>{{ $item->student_deleted }}</td>
+                                        
                                         <td> 
                                              <img src="{{ Storage::url($item->qr_code_path) }}" alt="" height="64">
 
@@ -99,6 +101,7 @@
                                         <td> {{ $item->student_guardian }} </td>
                                         <td> {{ $item->student_address }} </td>
                                         <td> {{ $item->student_contact_number }} </td>
+                                        <td> {{ $item->strand_name }} </td>
                                         <td> {{ $item->year_level }} </td>
                                         <td> {{ $item->section_name }} </td>
 
@@ -144,7 +147,7 @@
 
             $('#student').DataTable(
                 {
-                    "order": [ 0, 'desc' ],
+                    "order": [ 7, 'asc'],
                     
                     // columnDefs: [
                     //     {
@@ -161,25 +164,7 @@
                 this.parentNode.submit();
             });
         
-            $('#level').change(function (e) { 
-                var level = this.value;
-                $('#section').html('');
-
-                var initial_url = '{{ route('admin.levels.section', ['level'=>0] ) }}';
-                var url = initial_url.replace('0', level);
-
-                $.ajax({
-                    type: "GET",
-                    url: url,
-                    success: function (response) {
-                        $("#section").append("<option value=''>--SELECT--</option>");
-                        $.each(response, function (key, value) { 
-                            
-                            $("#section").append("<option value='"+ value.id +"'   >"+ value.name +"</option>");
-                        });
-                    }
-                });
-            });
+           
 
         });
 

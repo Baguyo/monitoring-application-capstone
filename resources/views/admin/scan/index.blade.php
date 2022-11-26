@@ -9,7 +9,7 @@
 
         <hr>
 
-        <div id="qr-reader" style="width: 600px" class="mx-auto"></div>
+        <div id="qr-reader" style="width: 600px; transform: scaleX(-1)" class="mx-auto"></div>
 
 
         <script src="https://unpkg.com/html5-qrcode@2.0.9/dist/html5-qrcode.min.js"></script>
@@ -31,6 +31,9 @@
                         <div class="col-lg-6 text-center">
                             <h1>image</h1>
                             <img src="" alt="" class="student-image">
+                            <div class="img-found">
+
+                            </div>
                         </div>
                         <div class="col-lg-6">
                             <h3 class="name"></h3>
@@ -81,7 +84,7 @@
             previousCode = decodedText;        
             // console.log(`Code scanned = ${decodedText}`, decodedResult);
             var url = '{{ route('admin.scanCode') }}';
-            console.log(decodedText);
+            
 
             $.ajaxSetup({
                 headers: {
@@ -96,9 +99,14 @@
                 success: function (response) {
                   // alert(response);
                     if(typeof(response) === 'object'){
-                        // alert(response.student.user.name)
+                        
+                        if(!response.student.user.img_path){
+                          $('.student-image').attr('src', " {{ Storage::url('defaults/logo.jpg') }} ");
+                        }else{
+                        $('.img-found').html(`<img src={{ Storage::url('${response.student.user.img_path}') }} alt="">`);
+                        }
 
-                        $('.student-image').attr('src', " {{ Storage::url('defaults/userdefault.png') }} ");
+                        
                         
                         
 
@@ -122,7 +130,7 @@
                         $('.nf-modal').modal('show');
                         $('#qr-reader').hide();
                         setTimeout(() => {
-                            $('.nf-modal').modal('hide');
+                              $('.nf-modal').modal('hide');
                             $('#qr-reader').show();
                         }, 2000);
                         
@@ -133,7 +141,7 @@
         
     }
     var html5QrcodeScanner = new Html5QrcodeScanner(
-        "qr-reader", { fps: 10, qrbox: 250 });
+        "qr-reader", { fps: 60, qrbox: 400 });
     html5QrcodeScanner.render(onScanSuccess);
 
     

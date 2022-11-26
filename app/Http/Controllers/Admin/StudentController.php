@@ -9,6 +9,7 @@ use App\Http\Requests\StoreStudent;
 use App\Http\Requests\UpdateStudent;
 use App\Models\MonitoringRecord;
 use App\Models\QrCode as ModelsQrCode;
+use App\Models\Strands;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Models\Student;
 use App\Models\User;
@@ -19,9 +20,10 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-
+use SmsGateway24\SmsGateway24;
 class StudentController extends Controller
 {
+    
 
 
     public function __construct()
@@ -47,7 +49,8 @@ class StudentController extends Controller
             return DB::table('students')
                         // ->select('students.id', 'students.name', 'students.email')
                         ->join('qr_codes', 'qr_codes.student_id', 'students.id')
-                        ->join('sections', 'sections.id', 'students.section_id')    
+                        ->join('sections', 'sections.id', 'students.section_id')
+                        ->join('strands', 'strands.id', 'sections.strands_id')
                         ->join('year_levels', 'year_levels.id', 'sections.year_level_id')
                         ->join('users', 'users.id', 'students.user_id')
                         //SELECT STUDENT DATA
@@ -60,11 +63,14 @@ class StudentController extends Controller
                                 //SELECT USER DATA
                          'users.name as users_name', 'users.email as users_email',
                                 //SECTION DATA
-                        'sections.name as section_name', 'year_levels.level as year_level' )
+                        'sections.name as section_name', 'year_levels.level as year_level',
+                                //SELECT STRAND NAME
+                        'strands.name as strand_name'
+                         )
                         ->get();
 
         });
-        // dd($students);
+        
 
         return view('admin.student.index', ['students'=>$students]);
     }
@@ -76,8 +82,9 @@ class StudentController extends Controller
      */
     public function create()
     {
+        $all_strands = Strands::all();
         $all_year_level = YearLevel::all();
-        return view('admin.student.create', ['all_year_level'=> $all_year_level]);
+        return view('admin.student.create', ['all_year_level'=> $all_year_level, 'all_strands'=>$all_strands]);
     }
 
     /**
@@ -148,9 +155,10 @@ class StudentController extends Controller
      */
     public function edit($id)
     {
+        $all_strands = Strands::all();
         $student = Student::with('user')->findOrFail($id);
         $all_year_level = YearLevel::all();
-        return view('admin.student.edit', ['all_year_level'=> $all_year_level, 'student'=>$student]);
+        return view('admin.student.edit', ['all_year_level'=> $all_year_level, 'student'=>$student, 'all_strands'=>$all_strands]);
     }
 
     /**
@@ -267,13 +275,30 @@ class StudentController extends Controller
      * Accept ajax request
      */
     public function scanCode(Request $request){
+
+        $smsGateway = new SmsGateway24(env('SMS_GATE_AWAY_API'));
+
+
         $code = base64_decode($request->input('code'));
         $qr_code = ModelsQrCode::with('student.user')->with('student.section')->firstWhere('code', "$code");
+        
+        
         if(!$qr_code){
             return "not found";
         }else{
             $date = Carbon::now()->timezone('Asia/Singapore')->format('Y-m-d');
             $time = Carbon::now()->timezone('Asia/Singapore')->format('H:i:s');
+
+            $time_ideal_format = Carbon::now()->timezone('Asia/Singapore')->format('h:i:s:A');
+
+            $to = "+63".$qr_code->student->contact_number;  // Also this is our Support number. Text us to WhatsApp
+            $deviceId = env('SMS_GATE_AWAY_DEVICE_ID'); // get it in your profile after app installation on your android
+            $customerid = null; // Optional. your internal customer ID. 
+            $urgent = null; // Optional. 1 or 0 to make sms Urgent.  
+            $sim=env('SMS_GATE_AWAY_SIM');  // 0 or 1. For Dual SIM devices. (default sim = 0)
+            $customerid=null; // your internal customer ID. 
+
+            
             // return $qr_code->student->id;
              $monitoring_record = MonitoringRecord::where('student_id', $qr_code->student->id)->where('date',$date )->first();
             if(!$monitoring_record){
@@ -282,11 +307,45 @@ class StudentController extends Controller
                 $new_monitoring_record->first_in = $time;
                 $new_monitoring_record->student_id = $qr_code->student->id;
                 $new_monitoring_record->save();
+
+                //CONTRACTING THE MESSAGE
+                $message = "{$qr_code->student->user->name} has safely arrived at Fullbright College Inc. ";
+                $message = $message . "Date: {$date}, Time: {$time_ideal_format}. ";
+                $message = $message . " ( {$qr_code->student->user->name} ay ligtas na nakarating sa Fullbright College Inc. ";
+                $message = $message . "Petsa: {$date} , Oras: {$time_ideal_format} )" ;
+                $smsGateway->addSms($to, $message, $deviceId, $customerid, $sim, $customerid, $urgent);
             }else{
                 foreach (MonitoringRecord::$time_status as $value) {
                     if( !isset($monitoring_record->$value) ){
                         $monitoring_record->$value = $time;
                         $monitoring_record->save();
+
+                        if($value === 'first_out' || $value === 'second_out'){
+                            $message = "{$qr_code->student->user->name} has left Fullbright College Inc. ";
+                            $message = $message . "Date: {$date}, Time: {$time_ideal_format}. ";
+                            $message = $message . " ( {$qr_code->student->user->name} ay umalis na sa Fullbright College Inc. ";
+                            $message = $message . "Petsa: {$date} , Oras: {$time_ideal_format} )" ;
+                            $smsGateway->addSms($to, $message, $deviceId, $customerid, $sim, $customerid, $urgent);
+                        }elseif($value === 'first_in' || $value === 'second_in'){
+                            $message = "{$qr_code->student->user->name} has safely arrived at Fullbright College Inc. ";
+                            $message = $message . "Date: {$date}, Time: {$time_ideal_format}. ";
+                            $message = $message . " ( {$qr_code->student->user->name} ay ligtas na nakarating sa Fullbright College Inc. ";
+                            $message = $message . "Petsa: {$date} , Oras: {$time_ideal_format} )" ;
+                            $smsGateway->addSms($to, $message, $deviceId, $customerid, $sim, $customerid, $urgent);
+                        }else{
+                            $message = "{$qr_code->student->user->name} successfully scan his/her Qr code at Fullbright College Inc. ";
+                            $message = $message . "Date: {$date}, Time: {$time_ideal_format}. ";
+                            $message = $message . " ( {$qr_code->student->user->name} ay matagumpay na na scan ang kanyang Qr code sa Fullbright College Inc. ";
+                            $message = $message . "Petsa: {$date} , Oras: {$time_ideal_format} )" ;
+                            $smsGateway->addSms($to, $message, $deviceId, $customerid, $sim, $customerid, $urgent);
+                        }
+                        break;
+                    }elseif($value === 'second_out' && isset($monitoring_record->$value)){
+                        $message = "{$qr_code->student->user->name} successfully scan his/her Qr code at Fullbright College Inc. ";
+                        $message = $message . "Date: {$date}, Time: {$time_ideal_format}. ";
+                        $message = $message . " ( {$qr_code->student->user->name} ay matagumpay na na scan ang kanyang Qr code sa Fullbright College Inc. ";
+                        $message = $message . "Petsa: {$date} , Oras: {$time_ideal_format} )" ;
+                        $smsGateway->addSms($to, $message, $deviceId, $customerid, $sim, $customerid, $urgent);
                         break;
                     }
                 }

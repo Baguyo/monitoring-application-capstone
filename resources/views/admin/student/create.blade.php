@@ -56,7 +56,8 @@
 
                                  <div class="mb-3">
                                    <label for="" class="form-label font-weight-normal">Guardian name</label>
-                                   <input type="text" name="guardian" id="" class="form-control @error('guardian') is-invalid @enderror" placeholder="" aria-describedby="helpId">
+                                   <input type="text" name="guardian" value="{{ old('guardian') }}"
+                                   class="form-control @error('guardian') is-invalid @enderror" placeholder="" aria-describedby="helpId">
                                    @error('guardian')
                                         <p class="text-danger font-weight-bold">{{ $message }}</p>
                                     @enderror
@@ -73,16 +74,35 @@
                                 </div>
 
                                 <div class="mb-3">
+
                                     <label for="" class="form-label font-weight-normal">Contact Number</label>
-                                    <input type="tel" value="{{ old('contact_number', "+63") }}"  pattern="[+]{1}[0-9]{11,14}"
-                                      class="form-control @error('contact_number') is-invalid @enderror" name="contact_number" id="" aria-describedby="helpId" placeholder="">
-                                      @error('contact_number')
+                                    <div class="input-group ">
+                                        <div class="input-group-prepend">
+                                          <span class="input-group-text" id="basic-addon1">+63</span>
+                                        </div>
+                                        <input type="tel" value="{{ old('contact_number') }}" 
+                                        class="form-control @error('contact_number') is-invalid @enderror" name="contact_number" id="" aria-describedby="helpId" placeholder="">
+                                    </div>
+                                    @error('contact_number')
+                                            <p class="text-danger font-weight-bold">{{ $message }}</p>
+                                        @enderror
+                                </div>
+
+                                  <div class="mb-3">
+                                    <label for="" class="form-label font-weight-normal">Strand:</label>
+                                    <select class="form-select form-select-lg form-control @error('strand') is-invalid @enderror" name="strand" id="strand">
+                                        <option selected value="">Select one</option>
+                                        @forelse ($all_strands as $strand)
+                                            <option value="{{ $strand->id }}"> {{ $strand->name }} </option>
+                                        @empty
+                                            <option value="">No Strand</option>
+                                        @endforelse
+                                    </select>
+                                    @error('strand')
                                         <p class="text-danger font-weight-bold">{{ $message }}</p>
                                     @enderror
-                                        <p class="form-text text-muted">
-                                            format: +639100100101
-                                        </p>
-                                  </div>
+                                </div>
+
 
                                 <div class="mb-3">
                                     <label for="" class="form-label font-weight-normal">Grade Level</label>
@@ -131,10 +151,14 @@
             
             $('#level').change(function (e) { 
                 var level = this.value;
-                $('#section').html('');
+                var strand = $('#strand').val();
 
-                var initial_url = '{{ route('admin.levels.section', ['level'=>0] ) }}';
+                $('#section').html('');
+                var initial_url = '{{ route('admin.levels.section', ['level'=>0, 'strand'=>-1] ) }}';
                 var url = initial_url.replace('0', level);
+                url = url.replace('-1', strand);
+
+                
 
                 $.ajax({
                     type: "GET",
@@ -147,6 +171,8 @@
                         });
                     }
                 });
+
+               
             });
 
         });

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreYearLevel;
+use App\Models\Section;
 use App\Models\YearLevel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -173,17 +174,20 @@ class YearLevelController extends Controller
      * @param int @id
      * @return \Illuminate\Http\Response
      */
-    public function getSection($id){
+    public function getSection($level,$strand){
 
-        $levels_section = YearLevel::with('sections')->findOrFail($id);
+        // $levels_section = YearLevel::with('sections')->findOrFail($level);
 
-        // return $levels_section;
-        $section = $levels_section->sections()->get();
+        // // return $levels_section;
+        // $section = $levels_section->sections()->get();
+
+        $section = Section::where('year_level_id', '=', $level)
+                                ->where('strands_id', '=', $strand)->get();
         
 
         if(count($section) > 0 ){
             return response()->json($section);
-            // return "pota";
+            
         }
 
     }

@@ -23,7 +23,7 @@
 
                         
 
-                        <form action="{{ route('admin.strand.update', ['strand'=>$strand->id]) }}" method="post">
+                        <form action="{{ route('admin.strand.update', ['strand'=>$strands->id]) }}" method="post">
                             @method('PUT')
                             @csrf
                             <div class="mb-3">

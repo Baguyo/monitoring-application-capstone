@@ -40,7 +40,7 @@ window.DataTable = DataTable;
 
 DataTable(window,$);
 
-var table =  $('#section-table').DataTable();
+
 
 
 

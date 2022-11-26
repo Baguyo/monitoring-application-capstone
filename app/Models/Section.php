@@ -15,7 +15,7 @@ class Section extends Model
         'name',
     ];
 
-    public function strand(){
+    public function strands(){
         return $this->belongsTo('App\Models\Strands');
     }
 

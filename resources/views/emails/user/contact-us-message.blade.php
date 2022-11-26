@@ -1,11 +1,9 @@
 @component('mail::message')
-# Introduction
+Hello Admin!
 
-{{ $message }}
+{{ $user->name }} Send a message : {{ $message }}
 
-@component('mail::button', ['url' => ''])
-Button Text
-@endcomponent
+
 
 Thanks,<br>
 {{ config('app.name') }}

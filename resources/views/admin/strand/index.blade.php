@@ -69,23 +69,7 @@
                                                 
                                             </td>
                                     @endif
-{{-- 
-                                         <td>{{ $item->name }}</td>
-                                        <td>{{ $item->created_at }}</td>
-                                        <td>{{ $item->updated_at }}</td>
-                                        <td>
-                                            <a href="{{ route('admin.strand.edit', ['strand'=>$item->id]) }}" class="btn btn-primary"> <i class="fas fa-pen-fancy"></i> </a>
-                                            /
-                                            <form action="{{ route('admin.strand.destroy', ['strand'=>$item->id]) }}" method="post" class="d-inline delete" >
-                                                @method('DELETE')
-                                                @csrf
-                                                <button type="submit" class="btn btn-danger">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </form>
-                                            
-                                            
-                                        </td> --}}
+
                                     
                                 </tr> 
                             @empty
