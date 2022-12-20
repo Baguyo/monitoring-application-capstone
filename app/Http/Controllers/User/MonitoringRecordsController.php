@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\FilterMsRecords;
 use App\Models\MonitoringRecord;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 
 class MonitoringRecordsController extends Controller
@@ -27,9 +28,10 @@ class MonitoringRecordsController extends Controller
         $validatedDate = $request->validated();
         // $student = Student::findOrFail($validatedDate['student']);
         
-        $student_records = MonitoringRecord::with('student.user')->with('student.section')->where('student_id', '=', $validatedDate['student'])
+        $student_records = MonitoringRecord::with('student.user')->where('student_id', '=', Auth::user()->student->id)
         ->whereBetween('date', [$validatedDate['date-from'], $validatedDate['date-to']])->get();
 
+        
         return view('user.monitoringRecords.show', ['records'=>$student_records]);
     }
 

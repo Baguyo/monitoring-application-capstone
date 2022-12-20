@@ -47,25 +47,25 @@ class StudentController extends Controller
         //                 ->get();
         $students = Cache::remember('allStudents', 60, function(){
             return DB::table('students')
-                        // ->select('students.id', 'students.name', 'students.email')
+                        ->select('students.id', 'students.name', 'students.email')
                         ->join('qr_codes', 'qr_codes.student_id', 'students.id')
-                        ->join('sections', 'sections.id', 'students.section_id')
-                        ->join('strands', 'strands.id', 'sections.strands_id')
-                        ->join('year_levels', 'year_levels.id', 'sections.year_level_id')
+                        // ->join('sections', 'sections.id', 'students.section_id')
+                        // ->join('strands', 'strands.id', 'sections.strands_id')
+                        // ->join('year_levels', 'year_levels.id', 'sections.year_level_id')
                         ->join('users', 'users.id', 'students.user_id')
                         //SELECT STUDENT DATA
-                        ->select('students.id as student_id', 'students.guardian as student_guardian',
-                                'students.contact_number as student_contact_number', 'students.address as student_address',
-                                'students.user_id as student_user_id', 'students.section_id as student_section_id',
+                        ->select('students.id as student_id', 'students.student_number as student_number', 
+                                'students.contact_number as student_contact_number',
+                                'students.user_id as student_user_id', 
                                 'students.deleted_at as student_deleted',
                                 //SELECT QR CODE DATA
                          'qr_codes.id as qr_code_id', 'qr_codes.path as qr_code_path',
                                 //SELECT USER DATA
                          'users.name as users_name', 'users.email as users_email',
-                                //SECTION DATA
-                        'sections.name as section_name', 'year_levels.level as year_level',
-                                //SELECT STRAND NAME
-                        'strands.name as strand_name'
+                        //         //SECTION DATA
+                        // 'sections.name as section_name', 'year_levels.level as year_level',
+                        //         //SELECT STRAND NAME
+                        // 'strands.name as strand_name'
                          )
                         ->get();
 
@@ -82,9 +82,9 @@ class StudentController extends Controller
      */
     public function create()
     {
-        $all_strands = Strands::all();
-        $all_year_level = YearLevel::all();
-        return view('admin.student.create', ['all_year_level'=> $all_year_level, 'all_strands'=>$all_strands]);
+        // $all_strands = Strands::all();
+        // $all_year_level = YearLevel::all();
+        return view('admin.student.create');
     }
 
     /**
@@ -106,30 +106,34 @@ class StudentController extends Controller
         $new_user->save();
 
         $student = new Student();
-        $student->guardian = $validatedData['guardian'];
+        $student->student_number = $validatedData['student_number'];
+        // $student->guardian = $validatedData['guardian'];
         $student->contact_number = $validatedData['contact_number'];
-        $student->address = $validatedData['address'];
+        // $student->address = $validatedData['address'];
         $student->user_id = $new_user->id;
-        $student->section_id = $validatedData['section'];
+        // $student->section_id = $validatedData['section'];
         $student->save();
 
         //SAVE STUDENT QR CODE
         $qr_code = new ModelsQrCode();
         $image = QrCode::format('png')
                 ->eye('square')
-                ->style('dot', 0.5)
-                ->merge('\storage\app\public\defaults\logo.jpg', .3)
+                ->eyeColor(0, 0, 17, 255, 0, 0, 0)
+                ->eyeColor(1, 0, 17, 255, 0, 0, 0)
+                ->eyeColor(2, 255, 17, 0, 0, 0, 0)
+                ->merge('\storage\app\public\defaults\logo.png', .3)
                 ->errorCorrection('H')
-                 ->size(200)
-                 ->generate( base64_encode($student->guardian) );
-        $output_file = "Qr-code/{$student->user->name}.png";
+                ->size(250)
+                ->encoding('UTF-8')
+                 ->generate( base64_encode($student->student_number) );
+        $output_file = "Qr-code/{$student->student_number}.png";
 
-        $qr_code->code = $student->guardian;
+        $qr_code->code = $student->student_number;
         $qr_code->path = $output_file;
         $qr_code->student()->associate($student)->save();
         Storage::disk('public')->put($output_file,$image);
 
-         event( new StudentCreation($student) );
+         event( new StudentCreation($student, $validatedData['password']) );
         return redirect()->route('admin.student.index')->with('status', "New student {$new_user->name} was successfully added" );
     }
 
@@ -155,10 +159,10 @@ class StudentController extends Controller
      */
     public function edit($id)
     {
-        $all_strands = Strands::all();
+        // $all_strands = Strands::all();
         $student = Student::with('user')->findOrFail($id);
-        $all_year_level = YearLevel::all();
-        return view('admin.student.edit', ['all_year_level'=> $all_year_level, 'student'=>$student, 'all_strands'=>$all_strands]);
+        // $all_year_level = YearLevel::all();
+        return view('admin.student.edit',['student'=>$student]);
     }
 
     /**
@@ -195,14 +199,50 @@ class StudentController extends Controller
         /**
          * Updating the student Model
          */
-        $student->guardian = $validatedData['guardian'];
+        
+            $student_number = $request->validate([
+                'student_number' => "bail|required|min:3|integer|unique:students,student_number,".$student->id,
+            ]);
+
+        if($student->student_number !== $student_number['student_number']){
+            if($student->qr_code()){
+                Storage::disk('public')->delete($student->qr_code->path);
+            }
+            $student->qr_code->code = $student_number['student_number'];
+            $qr_code = new ModelsQrCode();
+            $image = QrCode::format('png')
+                ->eye('square')
+                ->eyeColor(0, 0, 17, 255, 0, 0, 0)
+                ->eyeColor(1, 0, 17, 255, 0, 0, 0)
+                ->eyeColor(2, 255, 17, 0, 0, 0, 0)
+                ->backgroundColor(255, 255, 255)
+                ->margin(2)
+                ->merge('\storage\app\public\defaults\logo.png', .3)
+                ->errorCorrection('H')
+                ->size(250)
+                ->encoding('UTF-8')
+                ->generate( base64_encode($student_number['student_number']) );
+            $output_file = "Qr-code/{$student_number['student_number']}.png";
+
+            
+            $student->qr_code->path = $output_file;
+            $student->qr_code->save();
+            Storage::disk('public')->put($output_file,$image);
+        }
+        
+
+        $student->student_number = $student_number['student_number'];
+        // $student->guardian = $validatedData['guardian'];
+        // $student->address = $validatedData['address'];
         $student->contact_number = $validatedData['contact_number'];
-        $student->address = $validatedData['address'];
+        
 
         //CHECK IF THERE'S SELECTED SECTION
-        if(!empty($request->input('section'))){
-            $student->section_id = $request->input('section');    
-        }
+        // if(!empty($request->input('section'))){
+        //     $student->section_id = $request->input('section');    
+        // }
+
+        
 
         
         $student->save();
@@ -210,44 +250,41 @@ class StudentController extends Controller
         return redirect()->route('admin.student.index')->with('status', "Student {$student->user->name} was successfully updated" );
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        $student = Student::findOrFail($id);
-        $student->delete();
+    // /**
+    //  * Remove the specified resource from storage.
+    //  *
+    //  * @param  int  $id
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function destroy($id)
+    // {
+    //     $student = Student::findOrFail($id);
+    //     $student->delete();
         
-        return redirect()->route('admin.student.index')->with('status', "Student {$student->user->name} was successfully deleted" );
-    }
+    //     return redirect()->route('admin.student.index')->with('status', "Student {$student->user->name} was successfully deleted" );
+    // }
 
 
 
-    public function restore($id)
-    {
-        $student = Student::withTrashed()->findOrFail($id);
-        $student->restore();
+    // public function restore($id)
+    // {
+    //     $student = Student::withTrashed()->findOrFail($id);
+    //     $student->restore();
         
-        return redirect()->route('admin.student.index')->with('status', "Student was successfully restored");
-    }
+    //     return redirect()->route('admin.student.index')->with('status', "Student was successfully restored");
+    // }
 
     /**
      * Delete permanently the specified resource from storage
-     * 
-     * @param int $id
-     * @return \Illuminate\Http\Response
      */
-    public function forceDelete($id)
-    {
-        // Student::where('id', $id)->withTrashed()->forceDelete();
-        $student = Student::withTrashed()->with(['qr_code'=>fn($q)=>$q->withTrashed()])->findOrFail($id);
+    // public function forceDelete($id)
+    // {
+    //     // Student::where('id', $id)->withTrashed()->forceDelete();
+    //     $student = Student::withTrashed()->with(['qr_code'=>fn($q)=>$q->withTrashed()])->findOrFail($id);
         
-        $student->forceDelete();
-        return redirect()->route('admin.student.index')->with('status', "Student was deleted permantly");   
-    }
+    //     $student->forceDelete();
+    //     return redirect()->route('admin.student.index')->with('status', "Student was deleted permantly");   
+    // }
 
 
 
@@ -280,7 +317,7 @@ class StudentController extends Controller
 
 
         $code = base64_decode($request->input('code'));
-        $qr_code = ModelsQrCode::with('student.user')->with('student.section')->firstWhere('code', "$code");
+        $qr_code = ModelsQrCode::with('student.user')->firstWhere('code', "$code");
         
         
         if(!$qr_code){
@@ -309,45 +346,46 @@ class StudentController extends Controller
                 $new_monitoring_record->save();
 
                 //CONTRACTING THE MESSAGE
-                $message = "{$qr_code->student->user->name} has safely arrived at Fullbright College Inc. ";
-                $message = $message . "Date: {$date}, Time: {$time_ideal_format}. ";
-                $message = $message . " ( {$qr_code->student->user->name} ay ligtas na nakarating sa Fullbright College Inc. ";
-                $message = $message . "Petsa: {$date} , Oras: {$time_ideal_format} )" ;
-                $smsGateway->addSms($to, $message, $deviceId, $customerid, $sim, $customerid, $urgent);
+                // $message = "{$qr_code->student->user->name} has safely arrived at Fullbright College Inc. ";
+                // $message = $message . "Date: {$date}, Time: {$time_ideal_format}. ";
+                // $message = $message . " ( {$qr_code->student->user->name} ay ligtas na nakarating sa Fullbright College Inc. ";
+                // $message = $message . "Petsa: {$date} , Oras: {$time_ideal_format} )" ;
+                // $smsGateway->addSms($to, $message, $deviceId, $customerid, $sim, $customerid, $urgent);
             }else{
                 foreach (MonitoringRecord::$time_status as $value) {
                     if( !isset($monitoring_record->$value) ){
                         $monitoring_record->$value = $time;
                         $monitoring_record->save();
-
-                        if($value === 'first_out' || $value === 'second_out'){
-                            $message = "{$qr_code->student->user->name} has left Fullbright College Inc. ";
-                            $message = $message . "Date: {$date}, Time: {$time_ideal_format}. ";
-                            $message = $message . " ( {$qr_code->student->user->name} ay umalis na sa Fullbright College Inc. ";
-                            $message = $message . "Petsa: {$date} , Oras: {$time_ideal_format} )" ;
-                            $smsGateway->addSms($to, $message, $deviceId, $customerid, $sim, $customerid, $urgent);
-                        }elseif($value === 'first_in' || $value === 'second_in'){
-                            $message = "{$qr_code->student->user->name} has safely arrived at Fullbright College Inc. ";
-                            $message = $message . "Date: {$date}, Time: {$time_ideal_format}. ";
-                            $message = $message . " ( {$qr_code->student->user->name} ay ligtas na nakarating sa Fullbright College Inc. ";
-                            $message = $message . "Petsa: {$date} , Oras: {$time_ideal_format} )" ;
-                            $smsGateway->addSms($to, $message, $deviceId, $customerid, $sim, $customerid, $urgent);
-                        }else{
-                            $message = "{$qr_code->student->user->name} successfully scan his/her Qr code at Fullbright College Inc. ";
-                            $message = $message . "Date: {$date}, Time: {$time_ideal_format}. ";
-                            $message = $message . " ( {$qr_code->student->user->name} ay matagumpay na na scan ang kanyang Qr code sa Fullbright College Inc. ";
-                            $message = $message . "Petsa: {$date} , Oras: {$time_ideal_format} )" ;
-                            $smsGateway->addSms($to, $message, $deviceId, $customerid, $sim, $customerid, $urgent);
-                        }
-                        break;
-                    }elseif($value === 'second_out' && isset($monitoring_record->$value)){
-                        $message = "{$qr_code->student->user->name} successfully scan his/her Qr code at Fullbright College Inc. ";
-                        $message = $message . "Date: {$date}, Time: {$time_ideal_format}. ";
-                        $message = $message . " ( {$qr_code->student->user->name} ay matagumpay na na scan ang kanyang Qr code sa Fullbright College Inc. ";
-                        $message = $message . "Petsa: {$date} , Oras: {$time_ideal_format} )" ;
-                        $smsGateway->addSms($to, $message, $deviceId, $customerid, $sim, $customerid, $urgent);
                         break;
                     }
+
+                    //     if($value === 'first_out' || $value === 'second_out'){
+                    //         $message = "{$qr_code->student->user->name} has left Fullbright College Inc. ";
+                    //         $message = $message . "Date: {$date}, Time: {$time_ideal_format}. ";
+                    //         $message = $message . " ( {$qr_code->student->user->name} ay umalis na sa Fullbright College Inc. ";
+                    //         $message = $message . "Petsa: {$date} , Oras: {$time_ideal_format} )" ;
+                    //         $smsGateway->addSms($to, $message, $deviceId, $customerid, $sim, $customerid, $urgent);
+                    //     }elseif($value === 'first_in' || $value === 'second_in'){
+                    //         $message = "{$qr_code->student->user->name} has safely arrived at Fullbright College Inc. ";
+                    //         $message = $message . "Date: {$date}, Time: {$time_ideal_format}. ";
+                    //         $message = $message . " ( {$qr_code->student->user->name} ay ligtas na nakarating sa Fullbright College Inc. ";
+                    //         $message = $message . "Petsa: {$date} , Oras: {$time_ideal_format} )" ;
+                    //         $smsGateway->addSms($to, $message, $deviceId, $customerid, $sim, $customerid, $urgent);
+                    //     }else{
+                    //         $message = "{$qr_code->student->user->name} successfully scan his/her Qr code at Fullbright College Inc. ";
+                    //         $message = $message . "Date: {$date}, Time: {$time_ideal_format}. ";
+                    //         $message = $message . " ( {$qr_code->student->user->name} ay matagumpay na na scan ang kanyang Qr code sa Fullbright College Inc. ";
+                    //         $message = $message . "Petsa: {$date} , Oras: {$time_ideal_format} )" ;
+                    //         $smsGateway->addSms($to, $message, $deviceId, $customerid, $sim, $customerid, $urgent);
+                    //     }
+                    //     break;
+                    // }elseif($value === 'second_out' && isset($monitoring_record->$value)){
+                    //     $message = "{$qr_code->student->user->name} successfully scan his/her Qr code at Fullbright College Inc. ";
+                    //     $message = $message . "Date: {$date}, Time: {$time_ideal_format}. ";
+                    //     $message = $message . " ( {$qr_code->student->user->name} ay matagumpay na na scan ang kanyang Qr code sa Fullbright College Inc. ";
+                    //     $message = $message . "Petsa: {$date} , Oras: {$time_ideal_format} )" ;
+                    //     $smsGateway->addSms($to, $message, $deviceId, $customerid, $sim, $customerid, $urgent);
+                        
                 }
             }
             return $qr_code;

@@ -54,35 +54,35 @@ Route::group(['middleware'=> 'auth'], function(){
         Route::prefix('admin')->group(function(){
 
             //STRANDS
-            Route::as('admin')->resource('strand', App\Http\Controllers\Admin\StrandsController::class);
-            //STRAND EXTRA ACTION
-            Route::post('strand/{strand}/restore', [App\Http\Controllers\Admin\StrandsController::class, 'restore'])->name('admin.strand.restore');
-            Route::post('strand/{strand}/fd', [App\Http\Controllers\Admin\StrandsController::class, 'forceDelete'])->name('admin.strand.forceDelete');
+            // Route::as('admin')->resource('strand', App\Http\Controllers\Admin\StrandsController::class);
+            // //STRAND EXTRA ACTION
+            // Route::post('strand/{strand}/restore', [App\Http\Controllers\Admin\StrandsController::class, 'restore'])->name('admin.strand.restore');
+            // Route::post('strand/{strand}/fd', [App\Http\Controllers\Admin\StrandsController::class, 'forceDelete'])->name('admin.strand.forceDelete');
 
             //YEAR 
-            Route::as('admin')->resource('year', App\Http\Controllers\Admin\YearLevelController::class);
-            //YEAR EXTRA ACTION
-            Route::post('year/{year}/restore', [App\Http\Controllers\Admin\YearLevelController::class, 'restore'])->name('admin.year.restore');
-            Route::post('year/{year}/fd', [App\Http\Controllers\Admin\YearLevelController::class, 'forceDelete'])->name('admin.year.forceDelete');
+            // Route::as('admin')->resource('year', App\Http\Controllers\Admin\YearLevelController::class);
+            // //YEAR EXTRA ACTION
+            // Route::post('year/{year}/restore', [App\Http\Controllers\Admin\YearLevelController::class, 'restore'])->name('admin.year.restore');
+            // Route::post('year/{year}/fd', [App\Http\Controllers\Admin\YearLevelController::class, 'forceDelete'])->name('admin.year.forceDelete');
 
 
             //SECTION
-            Route::as('admin')->resource('section', App\Http\Controllers\Admin\SectionController::class);
-            //SECTION EXTRA ACTION
-            Route::post('section/{section}/r', [App\Http\Controllers\Admin\SectionController::class, 'restore'])->name('admin.section.restore');
-            Route::post('section/{section}/fd', [App\Http\Controllers\Admin\SectionController::class, 'forceDelete'])->name('admin.section.forceDelete');
+            // Route::as('admin')->resource('section', App\Http\Controllers\Admin\SectionController::class);
+            // //SECTION EXTRA ACTION
+            // Route::post('section/{section}/r', [App\Http\Controllers\Admin\SectionController::class, 'restore'])->name('admin.section.restore');
+            // Route::post('section/{section}/fd', [App\Http\Controllers\Admin\SectionController::class, 'forceDelete'])->name('admin.section.forceDelete');
 
 
             //STUDENT
-            Route::as('admin')->resource('student', App\Http\Controllers\Admin\StudentController::class);
+            Route::as('admin')->resource('student', App\Http\Controllers\Admin\StudentController::class)->except(['destroy']);
             //STUDENT EXTRA ACTION
-            Route::post('student/{student}/r', [App\Http\Controllers\Admin\StudentController::class, 'restore'])->name('admin.student.restore');
-            Route::post('student/{student}/fd', [App\Http\Controllers\Admin\StudentController::class, 'forceDelete'])->name('admin.student.forceDelete');
+            // Route::post('student/{student}/r', [App\Http\Controllers\Admin\StudentController::class, 'restore'])->name('admin.student.restore');
+            // Route::post('student/{student}/fd', [App\Http\Controllers\Admin\StudentController::class, 'forceDelete'])->name('admin.student.forceDelete');
             Route::post('student/{path}/download', [App\Http\Controllers\Admin\StudentController::class, 'qr_code'])->name('admin.student.qr_code');
 
 
             //ADMINISTRATOR
-            Route::as('admin')->resource('users', App\Http\Controllers\Admin\AdministratorController::class);
+            Route::as('admin')->resource('users', App\Http\Controllers\Admin\AdministratorController::class)->only(['edit','update', 'show']);
 
             //SCAN QR CODE
             Route::get('scan', [App\Http\Controllers\Admin\StudentController::class, 'scan'])->name('admin.scan');
@@ -96,8 +96,8 @@ Route::group(['middleware'=> 'auth'], function(){
 
 
             //FETCH LEVEL'S SECTIONS
-            Route::get('/get-sections/{level}/{strand}', [App\Http\Controllers\Admin\YearLevelController::class, 'getSection'])->name('admin.levels.section');
-            Route::get('/get-student/{section}', [App\Http\Controllers\Admin\SectionController::class, 'getStudents'])->name('admin.section.student');
+            // Route::get('/get-sections/{level}/{strand}', [App\Http\Controllers\Admin\YearLevelController::class, 'getSection'])->name('admin.levels.section');
+            // Route::get('/get-student/{section}', [App\Http\Controllers\Admin\SectionController::class, 'getStudents'])->name('admin.section.student');
         });
 
         
@@ -119,11 +119,11 @@ Route::group(['middleware'=> 'auth'], function(){
             //MS RECORDS
             Route::get('msrecord', [App\Http\Controllers\User\MonitoringRecordsController::class, 'index'])->name('user.records.index');
             Route::get('msrecordshow', [App\Http\Controllers\User\MonitoringRecordsController::class, 'show'])->name('user.records.show');
-            Route::get('msrecordexport/{sid}', [App\Http\Controllers\User\MonitoringRecordsController::class, 'export'])->name('user.records.export');
+            // Route::get('msrecordexport/{sid}', [App\Http\Controllers\User\MonitoringRecordsController::class, 'export'])->name('user.records.export');
 
             //CONTACT US
-            Route::get('contact', [App\Http\Controllers\User\ContactUsController::class, 'create'])->name('user.contact.create');
-            Route::post('contact', [App\Http\Controllers\User\ContactUsController::class, 'messageSend'])->name('user.contact.send');
+            // Route::get('contact', [App\Http\Controllers\User\ContactUsController::class, 'create'])->name('user.contact.create');
+            // Route::post('contact', [App\Http\Controllers\User\ContactUsController::class, 'messageSend'])->name('user.contact.send');
             
             
         });

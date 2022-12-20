@@ -6,6 +6,7 @@ namespace Database\Seeders;
 
 use App\Models\Student;
 use App\Models\YearLevel;
+use Database\Factories\MonitoringFactory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
 
@@ -29,10 +30,12 @@ class DatabaseSeeder extends Seeder
 
             $this->call([
                 UserTableSeeder::class,
-                StrandTableSeeder::class,
-                YearLevelTableSeeder::class,
-                SectionTableSeeder::class,
                 StudentTableSeeder::class,
+                MonitoringRecordsTableSeeder::class,
+                // StrandTableSeeder::class,
+                // YearLevelTableSeeder::class,
+                // SectionTableSeeder::class,
+                
             ]);
 
         }

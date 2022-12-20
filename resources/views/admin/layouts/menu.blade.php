@@ -2,30 +2,30 @@
 <li class="nav-item">
     <a href="{{ route('admin.dashboard') }}" class="nav-link {{ Request::is('admin_dashboard') ? 'active' : '' }}">
         <i class="nav-icon fas fa-home"></i>
-        <p>Home</p>
+        <p>Dashboard</p>
     </a>
 </li>
 
-<li class="nav-item">
+{{-- <li class="nav-item">
     <a href="{{ route('admin.strand.index') }}" class="nav-link {{ request()->route()->named('admin.strand*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-file"></i>
         <p>Strands</p>
     </a>
-</li>
+</li> --}}
 
-<li class="nav-item">
+{{-- <li class="nav-item">
     <a href="{{ route('admin.year.index') }}" class="nav-link {{ request()->route()->named('admin.year*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-chart-bar"></i>
         <p>Grade Level</p>
     </a>
-</li>
+</li> --}}
 
-<li class="nav-item">
+{{-- <li class="nav-item">
     <a href="{{ route('admin.section.index') }}" class="nav-link {{ request()->route()->named('admin.section*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-building"></i>
         <p>Sections</p>
     </a>
-</li>
+</li> --}}
 
 <li class="nav-item">
     <a href="{{ route('admin.student.index') }}" class="nav-link {{ request()->route()->named('admin.student*') ? 'active' : '' }}">
@@ -36,9 +36,9 @@
 
 
 <li class="nav-item">
-    <a href="{{ route('admin.users.index') }}" class="nav-link {{ request()->route()->named('admin.users*') ? 'active' : '' }}">
+    <a href="{{ route('admin.users.edit', ['user'=>Auth()->id()]) }}" class="nav-link {{ request()->route()->named('admin.users*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-user-lock"></i>
-        <p>Administrator</p>
+        <p>Edit Administrator</p>
     </a>
 </li>
 

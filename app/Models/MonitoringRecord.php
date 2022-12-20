@@ -14,6 +14,12 @@ class MonitoringRecord extends Model
         'first_out',
         'second_in',
         'second_out',
+        'third_in',
+        'third_out',
+        'fourth_in',
+        'fourth_out',
+        'fifth_in',
+        'fifth_out',
     ];
 
     public function student(){

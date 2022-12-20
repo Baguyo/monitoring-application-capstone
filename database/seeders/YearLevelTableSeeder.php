@@ -15,14 +15,14 @@ class YearLevelTableSeeder extends Seeder
      */
     public function run()
     {
-        $year_level = collect(['7', '8', '9', '10', '11','12']);
+        // $year_level = collect(['7', '8', '9', '10', '11','12']);
 
 
 
-        $year_level->each(function($item){
-            $yL = new YearLevel();
-            $yL->level = $item;
-            $yL->save();
-        });
+        // $year_level->each(function($item){
+        //     $yL = new YearLevel();
+        //     $yL->level = $item;
+        //     $yL->save();
+        // });
     }
 }

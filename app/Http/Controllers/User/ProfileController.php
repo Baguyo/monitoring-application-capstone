@@ -81,7 +81,9 @@ class ProfileController extends Controller
      */
     public function update(UpdateUser $request, $id)
     {
+        
         $userToEdit = User::findOrFail($id);
+        
         $this->authorize($userToEdit);
         $validatedData = $request->validated();
 
@@ -109,9 +111,10 @@ class ProfileController extends Controller
         $userToEdit->save();
 
         //EDIT STUDENT MODEL 
-        $userToEdit->student->guardian = $validatedData['guardian'];
+        
         $userToEdit->student->contact_number = $validatedData['contact_number'];
-        $userToEdit->student->address = $validatedData['address'];
+        // $userToEdit->student->address = $validatedData['address'];
+        // $userToEdit->student->guardian = $validatedData['guardian'];
 
         $userToEdit->student->save();
 

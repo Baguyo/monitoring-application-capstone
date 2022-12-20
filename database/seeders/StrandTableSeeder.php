@@ -17,12 +17,12 @@ class StrandTableSeeder extends Seeder
      */
     public function run()
     {
-        $strands = collect(['STEM','GAS','TVL', 'HUMMS']);
+        // $strands = collect(['STEM','GAS','TVL', 'HUMMS']);
 
-        foreach ($strands as $value) {
-            $strand = new Strands();
-            $strand->name = $value;
-            $strand->save();
-        }
+        // foreach ($strands as $value) {
+        //     $strand = new Strands();
+        //     $strand->name = $value;
+        //     $strand->save();
+        // }
     }
 }

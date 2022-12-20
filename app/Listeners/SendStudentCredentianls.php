@@ -29,7 +29,7 @@ class SendStudentCredentianls
     public function handle(StudentCreation $event)
     {
         Mail::to($event->student->user)->send(
-            new NotifyStudentCreation($event->student)
+            new NotifyStudentCreation($event->student, $event->password)
         ); 
     }
 }

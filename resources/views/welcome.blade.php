@@ -28,7 +28,7 @@
 
         <div class="container-fluid ">
             <div class="row align-items-center vh-100" >
-                <div class="col-lg-8 col-md-7  d-none d-sm-none  d-md-block h-100 d-lg-flex d-md-flex justify-content-center align-items-center" style="background: linear-gradient(-45deg, #1C5BCF 50%, #F51434 50%)">
+                <div class="col-lg-8 col-md-7  d-none d-sm-none  d-md-block h-100 d-lg-flex d-md-flex justify-content-center align-items-center" style="background: linear-gradient(45deg, #1C5BCF 50%, #F51434 50%)">
                     <div class="mx-auto text-center">
                         <img src="{{ Storage::url('defaults/logo.png') }}" alt="" width="260px">
                         <h1 class="text-white">Monitoring system</h1>

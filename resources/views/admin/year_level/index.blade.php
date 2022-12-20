@@ -63,7 +63,7 @@
                                                 <form action="{{ route('admin.year.destroy', ['year'=>$item->id]) }}" method="post" class="d-inline delete" >
                                                     @method('DELETE')
                                                     @csrf
-                                                    <button type="submit" class="btn btn-danger">
+                                                    <button type="submit" class="btn btn-danger" >
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </form>
@@ -118,7 +118,9 @@
                 confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
                 if (result.isConfirmed) {
+                    
                     this.submit();
+                    this.addClass('disabled');
                 }
             })
         });

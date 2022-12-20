@@ -16,12 +16,12 @@
                 <form action="{{ route('user.records.show') }}" method="GET">
                     <div class="form-row">
 
-                      <div class="">
+                      {{-- <div class="">
                         <input type="number" name="student" id="" value="{{ Auth::user()->student->id }}"  class="d-none disabled">
                       </div>
                       @error('student')
                             <p class="text-danger font-weight-bold">{{ $message }}</p>
-                        @enderror
+                        @enderror --}}
 
                       <div class="col">
                         <label for="" class="form-label">Date from</label>
@@ -52,33 +52,5 @@
        
 
     </div>
-    <script type="module">
-         
-         $('#section').change(function (e) { 
-                var level = this.value;
-                // alert(level);
-                $('#students').html('');
-
-                var initial_url = '{{ route('admin.section.student', ['section'=>0] ) }}';
-                var url = initial_url.replace('0', level);
-
-                $.ajax({
-                    type: "GET",
-                    url: url,
-                    success: function (response) {
-                        // console.log(response);
-                        $("#students").append("<option value=''>--SELECT--</option>");
-                        $.each(response, function (key, value) { 
-                            // alert(value.id);
-                            $("#students").append("<option value='"+ value.id +"'   >"+ value.user.name +"</option>");
-                        });
-                    }
-                });
-            });
-
-        
-
-        
-
-    </script>
+   
 @endsection

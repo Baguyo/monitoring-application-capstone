@@ -28,8 +28,8 @@ class UpdateUser extends FormRequest
             'name' => 'bail|required|min:5',
             'email' => "bail|required|email|unique:users,email,".Auth()->id(),
             'password' => 'confirmed',
-            'guardian'=> 'bail|required|min:5',
-            'address' => 'bail|required|min:4',
+            // 'guardian'=> 'bail|required|min:5',
+            // 'address' => 'bail|required|min:4',
             'contact_number'=>'bail|required|integer',
         ];
     }

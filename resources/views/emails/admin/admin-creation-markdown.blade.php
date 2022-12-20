@@ -8,7 +8,7 @@ Please use these login credintials:
 Email: {{ $user->email }}
 @endcomponent
 @component('mail::panel')
-Password: password
+Password: {{ $password }}
 @endcomponent
 
 Please change your password right after you login

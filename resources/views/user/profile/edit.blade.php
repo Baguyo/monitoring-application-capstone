@@ -66,6 +66,27 @@
                                       <input type="password" class="form-control" name="password_confirmation" id="" placeholder="">
                                    </div>
 
+                                   <label for="" class="form-label font-weight-normal">Contact Number</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                          <span class="input-group-text" id="basic-addon1">+63</span>
+                                        </div>
+                                        <input type="tel" value="{{ old('contact_number', $user->student->contact_number ?? "+63") }}" 
+                                        class="form-control @error('contact_number') is-invalid @enderror" name="contact_number" id="" aria-describedby="helpId" placeholder="">
+                                        @error('contact_number')
+                                            <p class="text-danger font-weight-bold">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+
+                                   <div class="mb-3">
+                                    <label for="" class="form-label font-weight-normal">Student Number:</label>
+                                    <input type="number" name="" id="" class="form-control" disabled readonly
+                                    placeholder="" aria-describedby="helpId" value="{{ $user->student->student_number }}" >
+                                    <p class="form-text text-muted">
+                                        Only admin can edit student number
+                                    </p>
+                                    </div>
+{{-- 
                                    <div class="mb-3">
                                      <label for="" class="form-label font-weight-normal">Address</label>
                                      <textarea class="form-control @error('address') is-invalid @enderror" name="address" id="" rows="3">{{ old('address', $user->student->address) }}
@@ -73,16 +94,16 @@
                                      @error('address')
                                           <p class="text-danger font-weight-bold">{{ $message }}</p>
                                       @enderror
-                                   </div>
+                                   </div> --}}
 
-                                    <div class="mb-3">
+                                    {{-- <div class="mb-3">
                                         <label for="" class="form-label font-weight-normal">Guardian Name:</label>
                                         <input type="text" name="guardian" id="" class="form-control @error('guardian') is-invalid @enderror"
                                         placeholder="" aria-describedby="helpId" value="{{ old('guardian', $user->student->guardian) }}" >
                                         @error('guardian')
                                             <p class="text-danger font-weight-bold">{{ $message }}</p>
                                         @enderror
-                                    </div>
+                                    </div> --}}
 
                                     
                                     {{-- <div class="mb-3">
@@ -97,17 +118,7 @@
                                             </p>
                                     </div> --}}
 
-                                    <label for="" class="form-label font-weight-normal">Contact Number</label>
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                          <span class="input-group-text" id="basic-addon1">+63</span>
-                                        </div>
-                                        <input type="tel" value="{{ old('contact_number', $user->student->contact_number ?? "+63") }}" 
-                                        class="form-control @error('contact_number') is-invalid @enderror" name="contact_number" id="" aria-describedby="helpId" placeholder="">
-                                        @error('contact_number')
-                                            <p class="text-danger font-weight-bold">{{ $message }}</p>
-                                        @enderror
-                                    </div>
+                                    
 
                                 <button type="submit" class="btn btn-primary mt-3">Submit</button>
                             </div>

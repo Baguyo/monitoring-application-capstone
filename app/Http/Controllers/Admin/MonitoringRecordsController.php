@@ -27,13 +27,13 @@ class MonitoringRecordsController extends Controller
     public function index()
     {
 
-        $year = 
-             YearLevel::select(['id','level'])->with('sections')->get();
-        
+        // $year = 
+        //      YearLevel::select(['id','level'])->with('sections')->get();
+        $all_student = Student::with('user')->get();
 
         // dd($year);
         // Cache::put('year',$year, 60);
-        return view('admin.monitoringRecords.index', ['year'=> $year]);
+        return view('admin.monitoringRecords.index', ['students'=>$all_student]);
     }
 
     /**
@@ -74,19 +74,20 @@ class MonitoringRecordsController extends Controller
         $student_records = DB::table('monitoring_records')
                                 ->join('students', 'students.id', 'monitoring_records.student_id')
                                 ->join('users', 'users.id', 'students.user_id')
-                                ->join('sections', 'sections.id', 'students.section_id')
                                 ->where('monitoring_records.student_id', '=', $validatedDate['student'])
                                 ->whereBetween('date', [$validatedDate['date-from'], $validatedDate['date-to']])
-                                ->select('users.name as user_name', 'sections.name as section_name', 'monitoring_records.date',
+                                ->select('users.name as user_name', 'monitoring_records.date',
                                         'monitoring_records.first_in', 'monitoring_records.first_out',
-                                        'monitoring_records.second_in', 'monitoring_records.second_out'
+                                        'monitoring_records.second_in', 'monitoring_records.second_out',
+                                        'monitoring_records.third_in', 'monitoring_records.third_out',
+                                        'monitoring_records.fourth_in', 'monitoring_records.fourth_out',
+                                        'monitoring_records.fifth_in', 'monitoring_records.fifth_out'
                                 )
                                 ->get();
                                 
-        
+        $all_student = Student::with('user')->get();
 
-        $year = YearLevel::with('sections')->get();
-        return view('admin.monitoringRecords.show', ['year'=>$year, 'records'=>$student_records]);
+        return view('admin.monitoringRecords.show', ['students'=>$all_student, 'records'=>$student_records]);
     }
 
 
@@ -96,7 +97,8 @@ class MonitoringRecordsController extends Controller
     public function export($id){
       $data = explode('+', $id);
 
-      $student_records = MonitoringRecord::with('student.user')->with('student.section')->where('student_id', '=', $data[0])
+      
+      $student_records = MonitoringRecord::with('student.user')->where('student_id', '=', $data[0])
         ->whereBetween('date', [$data[1], $data[2]])->get();
 
         $headers = array(
@@ -107,7 +109,7 @@ class MonitoringRecordsController extends Controller
             "Expires" => "0"
         );
     
-        $columns = array('Name', 'Section', 'Date', 'In', 'Out', 'In', 'Out');
+        $columns = array('Name', 'Date', 'In', 'Out', 'In', 'Out',  'In', 'Out',  'In', 'Out',  'In', 'Out');
     
         $callback = function() use ($student_records, $columns)
 
@@ -118,12 +120,17 @@ class MonitoringRecordsController extends Controller
             foreach($student_records as $item) {
                 fputcsv($file, array(
                     $item->student->user->name, 
-                    $item->student->section->name, 
                     $item->date,
                     ($item->first_in) ? date('h:i:A', strtotime($item->first_in)) : "",
                     ($item->first_out) ? date('h:i:A', strtotime($item->first_out)) : "",
                     ($item->second_in) ? date('h:i:A', strtotime($item->second_in)) : "",
                     ($item->second_out) ? date('h:i:A', strtotime($item->second_out)) : "",
+                    ($item->third_in) ? date('h:i:A', strtotime($item->third_in)) : "",
+                    ($item->third_out) ? date('h:i:A', strtotime($item->third_out)) : "",
+                    ($item->fourth_in) ? date('h:i:A', strtotime($item->fourth_in)) : "",
+                    ($item->fourth_out) ? date('h:i:A', strtotime($item->fourth_out)) : "",
+                    ($item->fifth_in) ? date('h:i:A', strtotime($item->fifth_in)) : "",
+                    ($item->fifth_out) ? date('h:i:A', strtotime($item->fifth_out)) : "",
                 ) );
             }
             fclose($file);

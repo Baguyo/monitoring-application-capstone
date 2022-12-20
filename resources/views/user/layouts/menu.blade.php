@@ -2,7 +2,7 @@
 <li class="nav-item">
     <a href="{{ route('user.dashboard') }}" class="nav-link {{ Request::is('user') ? 'active' : '' }}">
         <i class="nav-icon fas fa-home"></i>
-        <p>Home</p>
+        <p>Dashboard</p>
     </a>
 </li>
 
@@ -20,9 +20,9 @@
     </a>
 </li>
 
-<li class="nav-item">
+{{-- <li class="nav-item">
     <a href="{{ route('user.contact.create') }}" class="nav-link {{ request()->route()->named('user.contact*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-phone"></i>
         <p>Contact Admin</p>
     </a>
-</li> 
+</li>  --}}

@@ -24,7 +24,7 @@ class FilterMsRecords extends FormRequest
     public function rules()
     {
         return [
-            'student' => 'bail|required|integer',
+            // 'student' => 'bail|required|integer',
             'date-from' => 'bail|required|date',
             'date-to' => 'bail|required|date',
         ];

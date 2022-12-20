@@ -13,15 +13,17 @@ class NotifyStudentCreation extends Mailable
     use Queueable, SerializesModels;
 
     public $student;
+    public $password;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Student $student)
+    public function __construct(Student $student, $password)
     {
         $this->student = $student;
+        $this->password = $password;
     }
 
     /**

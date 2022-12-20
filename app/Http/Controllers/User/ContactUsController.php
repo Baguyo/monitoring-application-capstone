@@ -23,7 +23,7 @@ class ContactUsController extends Controller
     public function messageSend( SendContactMessage $request ){
         $validatedData = $request->validated();
 
-        Mail::to('fbcCapstone@gmail.com')->send(
+        Mail::to(env('MAIL_FROM_ADDRESS'))->send(
             new NotifyAdminContactUsMessage($validatedData['message']),
         );
 

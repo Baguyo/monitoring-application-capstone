@@ -55,23 +55,32 @@
                                  </div>
 
                                  <div class="mb-3">
+                                    <label for="" class="form-label font-weight-normal">Student Number</label>
+                                    <input type="number" value="{{ old('student_number') }}"
+                                     class="form-control  @error('student_number') is-invalid @enderror" name="student_number" id="" placeholder="">
+                                    @error('student_number')
+                                          <p class="text-danger font-weight-bold">{{ $message }}</p>
+                                      @enderror
+                                  </div>
+                                 
+                                 {{-- <div class="mb-3">
                                    <label for="" class="form-label font-weight-normal">Guardian name</label>
                                    <input type="text" name="guardian" value="{{ old('guardian') }}"
                                    class="form-control @error('guardian') is-invalid @enderror" placeholder="" aria-describedby="helpId">
                                    @error('guardian')
                                         <p class="text-danger font-weight-bold">{{ $message }}</p>
                                     @enderror
-                                 </div>
+                                 </div> --}}
 
 
-                                <div class="mb-3">
+                                {{-- <div class="mb-3">
                                     <label for="" class="form-label font-weight-normal">Address</label>
                                     <input type="text" value="{{ old('address') }}"
                                       class="form-control @error('address') is-invalid @enderror" name="address" id="" aria-describedby="helpId" placeholder="">                                  
                                     @error('address')
                                         <p class="text-danger font-weight-bold">{{ $message }}</p>
                                     @enderror
-                                </div>
+                                </div> --}}
 
                                 <div class="mb-3">
 
@@ -88,7 +97,7 @@
                                         @enderror
                                 </div>
 
-                                  <div class="mb-3">
+                                  {{-- <div class="mb-3">
                                     <label for="" class="form-label font-weight-normal">Strand:</label>
                                     <select class="form-select form-select-lg form-control @error('strand') is-invalid @enderror" name="strand" id="strand">
                                         <option selected value="">Select one</option>
@@ -130,7 +139,7 @@
                                     @error('section')
                                         <p class="text-danger font-weight-bold">{{ $message }}</p>
                                     @enderror
-                                </div>
+                                </div> --}}
 
                                 <button type="submit" class="btn btn-primary mt-3">Submit</button>
                             </div>
@@ -145,38 +154,6 @@
     </div>
 
 
-    <script type="module">
-
-        $(document).ready(function () {
-            
-            $('#level').change(function (e) { 
-                var level = this.value;
-                var strand = $('#strand').val();
-
-                $('#section').html('');
-                var initial_url = '{{ route('admin.levels.section', ['level'=>0, 'strand'=>-1] ) }}';
-                var url = initial_url.replace('0', level);
-                url = url.replace('-1', strand);
-
-                
-
-                $.ajax({
-                    type: "GET",
-                    url: url,
-                    success: function (response) {
-                        $("#section").append("<option value=''>--SELECT--</option>");
-                        $.each(response, function (key, value) { 
-                            
-                            $("#section").append("<option value='"+ value.id +"'   >"+ value.name +"</option>");
-                        });
-                    }
-                });
-
-               
-            });
-
-        });
-
-    </script>
+    
     
 @endsection

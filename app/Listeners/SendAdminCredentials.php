@@ -29,7 +29,7 @@ class SendAdminCredentials
     public function handle(AdminCreation $event)
     {
         Mail::to($event->user)->send(
-            new NotifyAdminCreation($event->user)
+            new NotifyAdminCreation($event->user, $event->password)
         ); 
     }
 }

@@ -48,8 +48,8 @@ class UserFactory extends Factory
 
         return $this->state(function(){
             return [
-                'name' => 'dudaydodz',
-                'email' => 'dudaydodz@gmail.com',
+                'name' => 'fbccapstone',
+                'email' => env('MAIL_FROM_ADDRESS'),
                 'type' => 1
             ];
         } );

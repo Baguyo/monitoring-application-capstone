@@ -34,14 +34,14 @@
                             @method("PUT")
                             @csrf
 
-                                <div class="mb-3">
+                                {{-- <div class="mb-3">
                                   <label for="" class="form-label font-weight-normal">Choose image file:</label>
                                   <input type="file" class="@error('avatar') is-invalid @enderror" name="avatar" id="">
 
                                     @error('avatar')
                                         <p class="text-danger font-weight-bold">{{ $message }}</p>
                                     @enderror
-                                </div>
+                                </div> --}}
 
                                 <div class="mb-3">
                                     <label for="" class="form-label font-weight-normal">Name:</label>
@@ -50,13 +50,12 @@
                                     @error('name')
                                         <p class="text-danger font-weight-bold">{{ $message }}</p>
                                     @enderror
-                                    
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="" class="form-label font-weight-normal">Email</label>
-                                    <input type="email" value="{{ old('email', $admin->email) }}"
-                                    class="form-control @error('email') is-invalid @enderror" name="email" id="" aria-describedby="emailHelpId" placeholder="abc@mail.com">
+                                    <input type="email" value="{{ old('email', $admin->email) }}" @disabled(true)
+                                    class="form-control">
                                     @error('email')
                                           <p class="text-danger font-weight-bold">{{ $message }}</p>
                                       @enderror

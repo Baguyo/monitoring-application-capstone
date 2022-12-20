@@ -8,11 +8,12 @@
       @endpageHeader  
 
         <hr>
+        {{-- style="width: 600px; transform: scaleX(-1)" --}}
+        <div id="qr-reader" style="width: 600px; transform: scaleX(-1)"  class="mx-auto"></div>
 
-        <div id="qr-reader" style="width: 600px; transform: scaleX(-1)" class="mx-auto"></div>
-
-
-        <script src="https://unpkg.com/html5-qrcode@2.0.9/dist/html5-qrcode.min.js"></script>
+        <script src="https://unpkg.com/html5-qrcode"></script>
+        {{-- <script src="https://unpkg.com/html5-qrcode@2.0.9/dist/html5-qrcode.min.js"></script> --}}
+        {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.4/html5-qrcode.min.js" integrity="sha512-k/KAe4Yff9EUdYI5/IAHlwUswqeipP+Cp5qnrsUjTPCgl51La2/JhyyjNciztD7mWNKLSXci48m7cctATKfLlQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> --}}
 
         {{-- FOUND MODAL --}}
         <div class="modal found-modal" tabindex="-1" role="dialog">
@@ -37,14 +38,12 @@
                         </div>
                         <div class="col-lg-6">
                             <h3 class="name"></h3>
-                            <h3 class="section"></h3>
                         </div>
                       </div>
                     </div>
 
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-primary">Save changes</button>
                   <button type="button" class="btn btn-secondary md-close" data-dismiss="modal">Close</button>
                 </div>
               </div>
@@ -117,7 +116,6 @@
                         */
 
                         $('.name').html( "Name: " + response.student.user.name);
-                        $('.section').html( "Section: " + response.student.section.name);
                         
                         $('.found-modal').modal('show');
                         $('#qr-reader').hide();
@@ -141,7 +139,7 @@
         
     }
     var html5QrcodeScanner = new Html5QrcodeScanner(
-        "qr-reader", { fps: 60, qrbox: 400 });
+        "qr-reader", { fps: 10, qrbox: 300 });
     html5QrcodeScanner.render(onScanSuccess);
 
     

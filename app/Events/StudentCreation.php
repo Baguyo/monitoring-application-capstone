@@ -16,15 +16,17 @@ class StudentCreation
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $student;
+    public $password;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(Student $student)
+    public function __construct(Student $student, string $password)
     {
         $this->student = $student;
+        $this->password = $password;
     }
 
     /**

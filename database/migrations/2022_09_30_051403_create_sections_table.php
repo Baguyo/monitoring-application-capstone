@@ -11,27 +11,27 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
-    {
-        Schema::create('sections', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
+    // public function up()
+    // {
+    //     Schema::create('sections', function (Blueprint $table) {
+    //         $table->id();
+    //         $table->string('name');
 
-            $table->unsignedBigInteger('year_level_id')->index();            
-            $table->foreign('year_level_id')->references('id')->on('year_levels')->onDelete('cascade');
+    //         $table->unsignedBigInteger('year_level_id')->index();            
+    //         $table->foreign('year_level_id')->references('id')->on('year_levels')->onDelete('cascade');
 
-            $table->timestamps();
-            $table->softDeletes();
-        });
-    }
+    //         $table->timestamps();
+    //         $table->softDeletes();
+    //     });
+    // }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('sections');
-    }
+    // /**
+    //  * Reverse the migrations.
+    //  *
+    //  * @return void
+    //  */
+    // public function down()
+    // {
+    //     Schema::dropIfExists('sections');
+    // }
 };

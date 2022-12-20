@@ -17,17 +17,17 @@ class SectionTableSeeder extends Seeder
      */
     public function run()
     {
-        $count_per_level = (int)$this->command->ask( "How many sections per grade level you want to create?", 5 );
+        // $count_per_level = (int)$this->command->ask( "How many sections per grade level you want to create?", 5 );
 
-        $yL = YearLevel::all();
-        $strand = Strands::all();
+        // $yL = YearLevel::all();
+        // $strand = Strands::all();
 
-        $yL->each(function($item) use($count_per_level, $strand) {
-            Section::factory()->count($count_per_level)->make()->each(function($section) use($item, $strand) {
-                $section->year_level_id = $item->id;
-                $section->strands_id = $strand->random()->id;
-                $section->save();
-            });
-        });
+        // $yL->each(function($item) use($count_per_level, $strand) {
+        //     Section::factory()->count($count_per_level)->make()->each(function($section) use($item, $strand) {
+        //         $section->year_level_id = $item->id;
+        //         $section->strands_id = $strand->random()->id;
+        //         $section->save();
+        //     });
+        // });
     }
 }

@@ -11,22 +11,22 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
-    {
-        Schema::table('year_levels', function (Blueprint $table) {
-            $table->softDeletes();
-        });
-    }
+    // public function up()
+    // {
+    //     Schema::table('year_levels', function (Blueprint $table) {
+    //         $table->softDeletes();
+    //     });
+    // }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('year_levels', function (Blueprint $table) {
-            $table->dropSoftDeletes();
-        });
-    }
+    // /**
+    //  * Reverse the migrations.
+    //  *
+    //  * @return void
+    //  */
+    // public function down()
+    // {
+    //     Schema::table('year_levels', function (Blueprint $table) {
+    //         $table->dropSoftDeletes();
+    //     });
+    // }
 };

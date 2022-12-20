@@ -17,7 +17,7 @@ class AdministratorPolicy
      */
     public function viewAny(User $user)
     {
-        return ($user->id == 1);
+        return false;
     }
 
     /**
@@ -40,7 +40,7 @@ class AdministratorPolicy
      */
     public function create(User $user)
     {
-        return ($user->id == 1);
+        return false;
     }
 
     /**
@@ -56,39 +56,5 @@ class AdministratorPolicy
         
     }
 
-    /**
-     * Determine whether the user can delete the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function delete(User $user, User $model)
-    {
-        return $user->id === $model->id;
-    }
 
-    /**
-     * Determine whether the user can restore the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function restore(User $user, User $model)
-    {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function forceDelete(User $user, User $model)
-    {
-        return false;
-    }
 }

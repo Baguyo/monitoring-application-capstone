@@ -11,22 +11,22 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
-    {
-        Schema::create('year_levels', function (Blueprint $table) {
-            $table->id();
-            $table->integer('level');
-            $table->timestamps();
-        });
-    }
+    // public function up()
+    // {
+    //     Schema::create('year_levels', function (Blueprint $table) {
+    //         $table->id();
+    //         $table->integer('level');
+    //         $table->timestamps();
+    //     });
+    // }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('year_levels');
-    }
+    // /**
+    //  * Reverse the migrations.
+    //  *
+    //  * @return void
+    //  */
+    // public function down()
+    // {
+    //     Schema::dropIfExists('year_levels');
+    // }
 };

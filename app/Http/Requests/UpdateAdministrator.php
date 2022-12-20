@@ -25,9 +25,9 @@ class UpdateAdministrator extends FormRequest
     public function rules()
     {
         return [
-            'avatar' => 'image|mimes:jpg,jpeg,gif,png,svg|max:3000',
+            // 'avatar' => 'image|mimes:jpg,jpeg,gif,png,svg|max:3000',
             'name' => 'bail|required|min:5',
-            'email' => "bail|required|email|unique:users,email,".Auth()->id(),
+            // 'email' => "bail|required|email|unique:users,email,".Auth()->id(),
             'password' => 'confirmed',
         ];
     }

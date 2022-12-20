@@ -43,16 +43,16 @@ class DashboardController extends Controller
         // });
 
         $total_students = User::where('type', '=', '0')->count();
-        $total_year_level = YearLevel::count();
-        $total_sections = Section::count();
-        $total_admin = User::where('type', '=', '1')->count();
+        // $total_year_level = YearLevel::count();
+        // $total_sections = Section::count();
+        // $total_admin = User::where('type', '=', '1')->count();
         $total_monitoring_record = MonitoringRecord::count();
 
         return view('admin.dashboard', [
             'total_students'=> $total_students, 
-            'total_year_level'=>$total_year_level,
-            'total_sections' => $total_sections,
-            'total_admin' => $total_admin,
+            // 'total_year_level'=>$total_year_level,
+            // 'total_sections' => $total_sections,
+            // 'total_admin' => $total_admin,
             'total_monitoring_records' => $total_monitoring_record,
             
         ]);

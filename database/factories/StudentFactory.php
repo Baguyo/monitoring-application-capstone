@@ -16,10 +16,9 @@ class StudentFactory extends Factory
      */
     public function definition()
     {
-        return [
-            'guardian' => fake()->name(),
+        return [            
+            'student_number' => fake()->numerify('##########'),
             'contact_number' => '9754588991',
-            'address'=> fake()->address()
         ];
     }
 }

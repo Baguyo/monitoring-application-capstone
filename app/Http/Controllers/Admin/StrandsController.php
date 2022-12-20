@@ -9,6 +9,13 @@ use Illuminate\Http\Request;
 
 class StrandsController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('user_access:admin');
+    }
+
     /**
      * Display a listing of the resource.
      *
