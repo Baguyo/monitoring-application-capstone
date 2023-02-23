@@ -8,6 +8,7 @@ use App\Http\Requests\StoreAdministrator;
 use App\Http\Requests\UpdateAdministrator;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -59,32 +60,31 @@ class AdministratorController extends Controller
      */
     public function update(UpdateAdministrator $request, User $user)
     {
-        
+     
 
         $validatedData = $request->validated();
+
+        
         if(!empty($validatedData['password'])){
-            $validatedData['password'] = Hash::make($validatedData['password']);
-            $user->update([
-                'name' => $validatedData['name'],
-                'password' => $validatedData['password'],
+            $password = $request->validate([
+                'password' => "min:6",
             ]);
-        }else{
+            $password = Hash::make($password['password']);
             $user->update([
-                'name' => $validatedData['name'],
+                'password' => $password,
             ]);
+        }
+
+        if(!empty($validatedData['time'])){
+            file_put_contents(app()->environmentFilePath(), str_replace(
+                'TIME_TO_SEND' . '=' . env('TIME_TO_SEND'),
+                'TIME_TO_SEND' . '=' . $validatedData['time'],
+                file_get_contents(app()->environmentFilePath())
+            ));
+            
         }
         return redirect()->back()->with('status', "Your profile was successfully updated" );
 
-        // if($request->hasFile('avatar')){
-        //     $img_path = $request->file('avatar')->store('avatars');
-            
-        //     if( isset($user->img_path) ){
-        //         Storage::delete($user->img_path);
-        //         $user->img_path = $img_path;
-        //     }else{
-        //         $user->img_path = $img_path;
-        //     }
-        // }
     }
 
     

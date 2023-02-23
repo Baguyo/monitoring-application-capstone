@@ -24,6 +24,7 @@ class StoreStudent extends FormRequest
     public function rules()
     {
         return [
+            'image' => "nullable|image|mimes:jpg,png,jpeg,gif,svg|max:5000",
             'name' => 'bail|required|min:3',
             'email' => 'bail|required|min:3|email|unique:users',
             'password'=> 'bail|required|confirmed|min:6',

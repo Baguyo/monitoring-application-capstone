@@ -24,8 +24,8 @@ class filterStudentRecords extends FormRequest
     public function rules()
     {
         return [
-            'level' => 'bail|required|integer',
-            'section' => 'required',
+            'date-from' => 'bail|required|date',
+            'date-to' => 'bail|required|date',
         ];
     }
 }

@@ -25,6 +25,7 @@ window.DataTable = DataTable;
 
 
 
+
 // import instascan from 'instascan';
 // window.dataTableSelect = import('datatables.net-select-bs4');
 // import 'jquery-datatables-checkboxes';

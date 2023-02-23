@@ -48,10 +48,10 @@ class UserFactory extends Factory
 
         return $this->state(function(){
             return [
-                'name' => 'fbccapstone',
+                'name' => 'Admin',
                 'email' => env('MAIL_FROM_ADDRESS'),
                 'type' => 1
-            ];
+            ];  
         } );
     }
 

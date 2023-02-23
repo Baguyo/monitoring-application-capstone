@@ -28,6 +28,7 @@
                             <tr>
                                 
                                 <th>QR code</th>    
+                                <th>Image</th>
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Student Number</th>
@@ -53,6 +54,9 @@
                                                 <button type="submit">Download</button>
                                              </form>
                                          </td>
+                                        <td> <img src=" {{ ($item->user_image) ? Storage::url($item->user_image) :Storage::url('defaults/logo.png') }} " 
+                                            alt="" height="100" width="100"> 
+                                        </td>
                                         <td> {{ $item->users_name }} </td>
                                         <td> {{ $item->users_email }} </td>
                                         <td> {{ $item->student_number }} </td>
@@ -95,7 +99,7 @@
 
             $('#student').DataTable(
                 {
-                    "order": [ 1, 'asc'],
+                    "order": [ 2, 'asc'],
                 }
             );
 

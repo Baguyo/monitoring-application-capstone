@@ -34,6 +34,8 @@
                             @method("PUT")
                             @csrf
 
+                            @validationError @endvalidationError
+
                                 {{-- <div class="mb-3">
                                   <label for="" class="form-label font-weight-normal">Choose image file:</label>
                                   <input type="file" class="@error('avatar') is-invalid @enderror" name="avatar" id="">
@@ -45,11 +47,7 @@
 
                                 <div class="mb-3">
                                     <label for="" class="form-label font-weight-normal">Name:</label>
-                                    <input type="text" name="name" id="" class="form-control @error('name') is-invalid @enderror"
-                                    placeholder="" aria-describedby="helpId" value="{{ old('name', $admin->name) }}" >
-                                    @error('name')
-                                        <p class="text-danger font-weight-bold">{{ $message }}</p>
-                                    @enderror
+                                    <input type="text" value="{{ $admin->name }}" @disabled(true) class="form-control">
                                 </div>
 
                                 <div class="mb-3">
@@ -64,15 +62,17 @@
                                   <div class="mb-3">
                                     <label for="" class="form-label font-weight-normal">Password</label>
                                     <input type="password" class="form-control  @error('password') is-invalid @enderror" name="password" id="" placeholder="">
-                                    @error('password')
-                                          <p class="text-danger font-weight-bold">{{ $message }}</p>
-                                      @enderror
                                   </div>
   
                                   <div class="mb-3">
                                       <label for="" class="form-label font-weight-normal">Retype Password</label>
                                       <input type="password" class="form-control" name="password_confirmation" id="" placeholder="">
                                    </div>
+
+                                   <div class="mb-3">
+                                    <label for="" class="form-label font-weight-normal">Time to send SMS</label>
+                                    <input type="time" class="form-control" name="time" id="" placeholder="">
+                                 </div>
 
                                 <button type="submit" class="btn btn-primary mt-3">Submit</button>
                             </div>

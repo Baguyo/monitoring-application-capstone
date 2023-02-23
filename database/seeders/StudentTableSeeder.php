@@ -40,12 +40,12 @@ class StudentTableSeeder extends Seeder
                     ->eyeColor(2, 255, 17, 0, 0, 0, 0)
                     ->backgroundColor(255, 255, 255)
                     ->margin(2)
-                    ->merge('\storage\app\public\defaults\logo.png', .3)
+                    ->merge('\storage\app\public\defaults\logo.jpg', .3)
                     ->errorCorrection('H')
                     ->size(250)
                     ->encoding('UTF-8')
                     ->generate( base64_encode($student->student_number) );
-            $output_file = "Qr-code/{$student->student_number}.png";
+            $output_file = "Qr-code/{$student->user->name}-{$student->student_number}.png";
 
 
             $qr_code->code = $student->student_number;

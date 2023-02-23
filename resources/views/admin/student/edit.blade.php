@@ -19,10 +19,23 @@
                     </div>
                     <div class="card-body">
 
-                        <form action="{{ route('admin.student.update', ['student'=> $student->id]) }}" method="post">
+                        <form action="{{ route('admin.student.update', ['student'=> $student->id]) }}" method="post" enctype="multipart/form-data">
                             @method('PUT')
                             @csrf
                             <div class="mb-3">
+
+                                <div class="mb-3">
+                                    <label for="" class="form-label font-weight-normal">Student Image: </label>
+                                    <input type="file" class="" name="image" id="" placeholder="" aria-describedby="fileHelpId">
+                                    @error('image')
+                                          <p class="text-danger font-weight-bold">{{ $message }}</p>
+                                      @enderror
+                                </div>
+
+                                <div class="mb-3">
+                                    <img src=" {{ ($student->user->img_path) ? Storage::url($student->user->img_path) :Storage::url('defaults/logo.png') }} " 
+                                         class="shadow" alt="" height="100" width="100">
+                                </div>
 
                                 <div class="mb-3">
                                   <label for="" class="form-label font-weight-normal">Name:</label>
@@ -65,23 +78,6 @@
                                       @enderror
                                   </div>
 
-                                {{-- <div class="mb-3">
-                                    <label for="" class="form-label font-weight-normal">Guardian name</label>
-                                    <input type="text" value="{{ old('guardian',$student->guardian) }}"
-                                        name="guardian" id="" class="form-control @error('guardian') is-invalid @enderror" placeholder="" aria-describedby="helpId">
-                                    @error('guardian')
-                                        <p class="text-danger font-weight-bold">{{ $message }}</p>
-                                    @enderror
-                                </div> --}}
-
-                                {{-- <div class="mb-3">
-                                    <label for="" class="form-label font-weight-normal">Address:</label>
-                                    <input type="text" value="{{ old('address', $student->address) }}"
-                                      class="form-control @error('address') is-invalid @enderror" name="address" id="" aria-describedby="helpId" placeholder="">                                  
-                                    @error('address')
-                                        <p class="text-danger font-weight-bold">{{ $message }}</p>
-                                    @enderror
-                                </div> --}}
 
                                 <div class="mb-3">
 
@@ -98,48 +94,6 @@
                                         @enderror
                                 </div>
 
-                                {{-- <div class="mb-3">
-                                    <label for="" class="form-label font-weight-normal">Strand:</label>
-                                    <select class="form-select form-select-lg form-control @error('strand') is-invalid @enderror" name="strand" id="strand">
-                                        <option selected value="">Select one</option>
-                                        @forelse ($all_strands as $strand)
-                                            <option value="{{ $strand->id }}"> {{ $strand->name }} </option>
-                                        @empty
-                                            <option value="">No Strand</option>
-                                        @endforelse
-                                    </select>
-                                    @error('strand')
-                                        <p class="text-danger font-weight-bold">{{ $message }}</p>
-                                    @enderror
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="" class="form-label font-weight-normal">Grade Level:</label>
-                                    <select class="form-select form-select-lg form-control @error('level') is-invalid @enderror" name="level" id="level" >
-                                        <option selected value="">Select one</option>
-                                        @forelse ($all_year_level as $item)
-                                            
-                                            <option value="{{ $item->id }}"> {{ $item->level }} </option>
-                                        @empty
-                                            <option value="">No Grade Level</option>
-                                        @endforelse
-                                    </select>
-                                    @error('level')
-                                        <p class="text-danger font-weight-bold">{{ $message }}</p>
-                                    @enderror
-                                </div>
-
-                                
-
-                                <div class="mb-3">
-                                    <label for="" class="form-label font-weight-normal">Section:</label>
-                                    <select class="form-select form-select-lg form-control @error('section') is-invalid @enderror" name="section" id="section">
-
-                                    </select>
-                                    @error('section')
-                                        <p class="text-danger font-weight-bold">{{ $message }}</p>
-                                    @enderror
-                                </div> --}}
 
                                 <button type="submit" class="btn btn-primary mt-3">Submit</button>
                             </div>

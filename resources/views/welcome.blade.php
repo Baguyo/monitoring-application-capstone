@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="icon" href="{{Storage::url('defaults/logo.png')}}" type="image/icon type">
-        <title>Monitoring_system</title>
+        <title>{{ config('app.name') }}</title>
 
         <!-- Fonts -->
         <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
@@ -57,7 +57,7 @@
                             
                         @endauth
                 
-                            <form method="post" action="{{ url('/login') }}">
+                            <form method="post" action="{{ url('/login') }}" class="login-form">
                                 @csrf
                 
                                 <div class="input-group mb-3">
@@ -99,7 +99,7 @@
                                     </div>
                 
                                     <div class="col-4">
-                                        <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                                        <button type="submit" class="login-btn btn btn-primary btn-block">Sign In</button>
                                     </div>
                 
                                 </div>
@@ -226,4 +226,9 @@
             </div>
         </div> --}}
     </body>
+    <script type="module">
+        $(".login-form").submit(function (e) { 
+            $(".login-btn").attr("disabled", "disabled");
+        });
+    </script>
 </html>

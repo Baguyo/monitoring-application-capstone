@@ -21,9 +21,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use SmsGateway24\SmsGateway24;
+
 class StudentController extends Controller
 {
-    
+
 
 
     public function __construct()
@@ -39,40 +40,32 @@ class StudentController extends Controller
      */
     public function index()
     {
-        
-        // $students = Student::withTrashed()
-        //                 ->with('user')
-        //                 ->with(['section'=> fn($q) => $q->withTrashed()->with(['yearLevel' => fn($s) => $s->withTrashed()])  ])
-        //                 ->with(['qr_code'=> fn($q) => $q->withTrashed()])
-        //                 ->get();
-        $students = Cache::remember('allStudents', 60, function(){
-            return DB::table('students')
-                        ->select('students.id', 'students.name', 'students.email')
-                        ->join('qr_codes', 'qr_codes.student_id', 'students.id')
-                        // ->join('sections', 'sections.id', 'students.section_id')
-                        // ->join('strands', 'strands.id', 'sections.strands_id')
-                        // ->join('year_levels', 'year_levels.id', 'sections.year_level_id')
-                        ->join('users', 'users.id', 'students.user_id')
-                        //SELECT STUDENT DATA
-                        ->select('students.id as student_id', 'students.student_number as student_number', 
-                                'students.contact_number as student_contact_number',
-                                'students.user_id as student_user_id', 
-                                'students.deleted_at as student_deleted',
-                                //SELECT QR CODE DATA
-                         'qr_codes.id as qr_code_id', 'qr_codes.path as qr_code_path',
-                                //SELECT USER DATA
-                         'users.name as users_name', 'users.email as users_email',
-                        //         //SECTION DATA
-                        // 'sections.name as section_name', 'year_levels.level as year_level',
-                        //         //SELECT STRAND NAME
-                        // 'strands.name as strand_name'
-                         )
-                        ->get();
 
-        });
-        
+        $students = DB::table('students')
+            ->select('students.id', 'students.name', 'students.email')
+            ->join('qr_codes', 'qr_codes.student_id', 'students.id')
+            ->join('users', 'users.id', 'students.user_id')
+            //SELECT STUDENT DATA
+            ->select(
+                'students.id as student_id',
+                'students.student_number as student_number',
+                'students.contact_number as student_contact_number',
+                'students.user_id as student_user_id',
+                'students.deleted_at as student_deleted',
+                //SELECT QR CODE DATA
+                'qr_codes.id as qr_code_id',
+                'qr_codes.path as qr_code_path',
+                //SELECT USER DATA
+                'users.name as users_name',
+                'users.email as users_email',
+                'users.img_path as user_image',
+            )
+            ->get();
 
-        return view('admin.student.index', ['students'=>$students]);
+
+
+
+        return view('admin.student.index', ['students' => $students]);
     }
 
     /**
@@ -82,8 +75,6 @@ class StudentController extends Controller
      */
     public function create()
     {
-        // $all_strands = Strands::all();
-        // $all_year_level = YearLevel::all();
         return view('admin.student.create');
     }
 
@@ -95,46 +86,49 @@ class StudentController extends Controller
      */
     public function store(StoreStudent $request)
     {
-        //STORE NEW USER AND ENCRYPT ITS UNIQUE INDENTIFICATION
-        //AND EMBED TO QR CODE
         $validatedData = $request->validated();
+
         $new_user = new User();
-        
         $new_user->name = $validatedData['name'];
         $new_user->email = $validatedData['email'];
+        //SAVING IMAGE 
+        if ($request->hasFile('image')) {
+            $img_path = $request->file('image')->store('avatars');
+            $new_user->img_path = $img_path;
+        }
         $new_user->password = Hash::make($validatedData['password']);
+
         $new_user->save();
 
+        //CREATING STUDENT
         $student = new Student();
         $student->student_number = $validatedData['student_number'];
-        // $student->guardian = $validatedData['guardian'];
         $student->contact_number = $validatedData['contact_number'];
-        // $student->address = $validatedData['address'];
         $student->user_id = $new_user->id;
-        // $student->section_id = $validatedData['section'];
         $student->save();
 
-        //SAVE STUDENT QR CODE
+        //CREATING STUDENT QR CODE
         $qr_code = new ModelsQrCode();
         $image = QrCode::format('png')
-                ->eye('square')
-                ->eyeColor(0, 0, 17, 255, 0, 0, 0)
-                ->eyeColor(1, 0, 17, 255, 0, 0, 0)
-                ->eyeColor(2, 255, 17, 0, 0, 0, 0)
-                ->merge('\storage\app\public\defaults\logo.png', .3)
-                ->errorCorrection('H')
-                ->size(250)
-                ->encoding('UTF-8')
-                 ->generate( base64_encode($student->student_number) );
-        $output_file = "Qr-code/{$student->student_number}.png";
-
+            ->eye('square')
+            ->eyeColor(0, 0, 17, 255, 0, 0, 0)
+            ->eyeColor(1, 0, 17, 255, 0, 0, 0)
+            ->eyeColor(2, 255, 17, 0, 0, 0, 0)
+            ->backgroundColor(255, 255, 255)
+            ->margin(2)
+            ->merge('\storage\app\public\defaults\logo.jpg', .3)
+            ->errorCorrection('H')
+            ->size(250)
+            ->encoding('UTF-8')
+            ->generate(base64_encode($student->student_number));
+        $output_file = "Qr-code/{$student->user->name}-{$student->student_number}.png";
         $qr_code->code = $student->student_number;
         $qr_code->path = $output_file;
         $qr_code->student()->associate($student)->save();
-        Storage::disk('public')->put($output_file,$image);
+        Storage::disk('public')->put($output_file, $image);
 
-         event( new StudentCreation($student, $validatedData['password']) );
-        return redirect()->route('admin.student.index')->with('status', "New student {$new_user->name} was successfully added" );
+        event(new StudentCreation($student, $validatedData['password']));
+        return redirect()->route('admin.student.index')->with('status', "New student {$new_user->name} was successfully added");
     }
 
     /**
@@ -149,7 +143,7 @@ class StudentController extends Controller
     }
 
 
-    
+
 
     /**
      * Show the form for editing the specified resource.
@@ -159,10 +153,8 @@ class StudentController extends Controller
      */
     public function edit($id)
     {
-        // $all_strands = Strands::all();
         $student = Student::with('user')->findOrFail($id);
-        // $all_year_level = YearLevel::all();
-        return view('admin.student.edit',['student'=>$student]);
+        return view('admin.student.edit', ['student' => $student]);
     }
 
     /**
@@ -181,31 +173,41 @@ class StudentController extends Controller
          * Updating the student's User Model
          */
         $email = $request->validate([
-            'email' => "bail|required|min:3|email|unique:users,email,".$student->user->id,
+            'email' => "bail|required|min:3|email|unique:users,email," . $student->user->id,
         ]);
 
-        if(!empty($validatedData['password'])){
+        if (!empty($validatedData['password'])) {
             $password = $request->validate([
                 'password' => "min:6",
             ]);
             $password = Hash::make($password['password']);
             $student->user->password = $password;
-        }        
+        }
         $student->user->name = $validatedData['name'];
         $student->user->email = $email['email'];
+        //SAVING IMAGE 
+        if ($request->hasFile('image')) {
+            $img_path = $request->file('image')->store('avatars');
+            if (isset($student->img_path)) {
+                Storage::delete($student->img_path);
+                $student->user->img_path = $img_path;
+            } else {
+                $student->user->img_path = $img_path;
+            }
+        }
         $student->user->save();
 
 
         /**
          * Updating the student Model
          */
-        
-            $student_number = $request->validate([
-                'student_number' => "bail|required|min:3|integer|unique:students,student_number,".$student->id,
-            ]);
 
-        if($student->student_number !== $student_number['student_number']){
-            if($student->qr_code()){
+        $student_number = $request->validate([
+            'student_number' => "bail|required|min:3|integer|unique:students,student_number," . $student->id,
+        ]);
+
+        if ($student->student_number !== $student_number['student_number']) {
+            if ($student->qr_code()) {
                 Storage::disk('public')->delete($student->qr_code->path);
             }
             $student->qr_code->code = $student_number['student_number'];
@@ -217,37 +219,25 @@ class StudentController extends Controller
                 ->eyeColor(2, 255, 17, 0, 0, 0, 0)
                 ->backgroundColor(255, 255, 255)
                 ->margin(2)
-                ->merge('\storage\app\public\defaults\logo.png', .3)
+                ->merge('\storage\app\public\defaults\logo.jpg', .3)
                 ->errorCorrection('H')
                 ->size(250)
                 ->encoding('UTF-8')
-                ->generate( base64_encode($student_number['student_number']) );
-            $output_file = "Qr-code/{$student_number['student_number']}.png";
-
-            
+                ->generate(base64_encode($student_number['student_number']));
+            $output_file = "Qr-code/{$student->user->name}-{$student->student_number}.png";
             $student->qr_code->path = $output_file;
             $student->qr_code->save();
-            Storage::disk('public')->put($output_file,$image);
+            Storage::disk('public')->put($output_file, $image);
+            
+            // iAC2H(UJTOtf
         }
-        
+
 
         $student->student_number = $student_number['student_number'];
-        // $student->guardian = $validatedData['guardian'];
-        // $student->address = $validatedData['address'];
         $student->contact_number = $validatedData['contact_number'];
-        
-
-        //CHECK IF THERE'S SELECTED SECTION
-        // if(!empty($request->input('section'))){
-        //     $student->section_id = $request->input('section');    
-        // }
-
-        
-
-        
         $student->save();
 
-        return redirect()->route('admin.student.index')->with('status', "Student {$student->user->name} was successfully updated" );
+        return redirect()->route('admin.student.index')->with('status', "Student {$student->user->name} was successfully updated");
     }
 
     // /**
@@ -260,7 +250,7 @@ class StudentController extends Controller
     // {
     //     $student = Student::findOrFail($id);
     //     $student->delete();
-        
+
     //     return redirect()->route('admin.student.index')->with('status', "Student {$student->user->name} was successfully deleted" );
     // }
 
@@ -270,7 +260,7 @@ class StudentController extends Controller
     // {
     //     $student = Student::withTrashed()->findOrFail($id);
     //     $student->restore();
-        
+
     //     return redirect()->route('admin.student.index')->with('status', "Student was successfully restored");
     // }
 
@@ -281,64 +271,65 @@ class StudentController extends Controller
     // {
     //     // Student::where('id', $id)->withTrashed()->forceDelete();
     //     $student = Student::withTrashed()->with(['qr_code'=>fn($q)=>$q->withTrashed()])->findOrFail($id);
-        
+
     //     $student->forceDelete();
     //     return redirect()->route('admin.student.index')->with('status', "Student was deleted permantly");   
     // }
 
 
 
-    
 
 
-    public function qr_code($path){
+
+    public function qr_code($path)
+    {
         $qr_code = ModelsQrCode::findOrFail($path);
 
 
         // return response()->download( public_path($qr_code->path) );
         return Storage::download($qr_code->path);
-        
-        
     }
 
     /**
      * Display scanner page
      */
-    public function scan(){
+    public function scan()
+    {
         return view('admin.scan.index');
     }
 
     /**
      * Accept ajax request
      */
-    public function scanCode(Request $request){
+    public function scanCode(Request $request)
+    {
 
         $smsGateway = new SmsGateway24(env('SMS_GATE_AWAY_API'));
 
 
         $code = base64_decode($request->input('code'));
         $qr_code = ModelsQrCode::with('student.user')->firstWhere('code', "$code");
-        
-        
-        if(!$qr_code){
+
+
+        if (!$qr_code) {
             return "not found";
-        }else{
+        } else {
             $date = Carbon::now()->timezone('Asia/Singapore')->format('Y-m-d');
             $time = Carbon::now()->timezone('Asia/Singapore')->format('H:i:s');
 
             $time_ideal_format = Carbon::now()->timezone('Asia/Singapore')->format('h:i:s:A');
 
-            $to = "+63".$qr_code->student->contact_number;  // Also this is our Support number. Text us to WhatsApp
+            $to = "+63" . $qr_code->student->contact_number;  // Also this is our Support number. Text us to WhatsApp
             $deviceId = env('SMS_GATE_AWAY_DEVICE_ID'); // get it in your profile after app installation on your android
             $customerid = null; // Optional. your internal customer ID. 
             $urgent = null; // Optional. 1 or 0 to make sms Urgent.  
-            $sim=env('SMS_GATE_AWAY_SIM');  // 0 or 1. For Dual SIM devices. (default sim = 0)
-            $customerid=null; // your internal customer ID. 
+            $sim = env('SMS_GATE_AWAY_SIM');  // 0 or 1. For Dual SIM devices. (default sim = 0)
+            $customerid = null; // your internal customer ID. 
 
-            
+
             // return $qr_code->student->id;
-             $monitoring_record = MonitoringRecord::where('student_id', $qr_code->student->id)->where('date',$date )->first();
-            if(!$monitoring_record){
+            $monitoring_record = MonitoringRecord::where('student_id', $qr_code->student->id)->where('date', $date)->first();
+            if (!$monitoring_record) {
                 $new_monitoring_record = new MonitoringRecord();
                 $new_monitoring_record->date = $date;
                 $new_monitoring_record->first_in = $time;
@@ -351,9 +342,9 @@ class StudentController extends Controller
                 // $message = $message . " ( {$qr_code->student->user->name} ay ligtas na nakarating sa Fullbright College Inc. ";
                 // $message = $message . "Petsa: {$date} , Oras: {$time_ideal_format} )" ;
                 // $smsGateway->addSms($to, $message, $deviceId, $customerid, $sim, $customerid, $urgent);
-            }else{
+            } else {
                 foreach (MonitoringRecord::$time_status as $value) {
-                    if( !isset($monitoring_record->$value) ){
+                    if (!isset($monitoring_record->$value)) {
                         $monitoring_record->$value = $time;
                         $monitoring_record->save();
                         break;
@@ -385,11 +376,10 @@ class StudentController extends Controller
                     //     $message = $message . " ( {$qr_code->student->user->name} ay matagumpay na na scan ang kanyang Qr code sa Fullbright College Inc. ";
                     //     $message = $message . "Petsa: {$date} , Oras: {$time_ideal_format} )" ;
                     //     $smsGateway->addSms($to, $message, $deviceId, $customerid, $sim, $customerid, $urgent);
-                        
+
                 }
             }
             return $qr_code;
         }
     }
-
 }

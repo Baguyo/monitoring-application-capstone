@@ -25,4 +25,12 @@ class MonitoringRecord extends Model
     public function student(){
         return $this->belongsTo('App\Models\Student');
     }
+
+    public static function convert_hours($value){
+        if($value){
+            return date('h:i:s a', strtotime($value));
+        }else{
+            return '';
+        }
+    }
 }

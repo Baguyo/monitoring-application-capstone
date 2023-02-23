@@ -33,12 +33,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        YearLevel::observe(YearLevelObserver::class);
-        Section::observe(SectionObserver::class);
+        // YearLevel::observe(YearLevelObserver::class);
+        // Section::observe(SectionObserver::class);
         Student::observe(StudentObserver::class);
-        Strands::observe(StrandObserver::class);
+        // Strands::observe(StrandObserver::class);
         date_default_timezone_set('Asia/Singapore');
         
         Blade::aliasComponent('components.page-header', 'pageHeader');
+        Blade::aliasComponent('components.validation-error', 'validationError');
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FilterMsRecords;
+use App\Http\Requests\filterStudentRecords;
 use App\Models\MonitoringRecord;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,7 +24,7 @@ class MonitoringRecordsController extends Controller
         return view('user.monitoringRecords.index');
     }
 
-    public function show(FilterMsRecords $request)
+    public function show(filterStudentRecords $request)
     {
         $validatedDate = $request->validated();
         // $student = Student::findOrFail($validatedDate['student']);

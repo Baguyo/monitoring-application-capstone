@@ -29,7 +29,14 @@ class MonitoringRecordsController extends Controller
 
         // $year = 
         //      YearLevel::select(['id','level'])->with('sections')->get();
-        $all_student = Student::with('user')->get();
+        // $all_student = Student::with(['user' => function($q){
+        //     return $q->orderBy('name', 'asc');
+        // }])->get();
+
+        $all_student =  Student::get()->sortBy(function($query){
+            return $query->user->name;
+         })
+         ->all();
 
         // dd($year);
         // Cache::put('year',$year, 60);
@@ -103,7 +110,7 @@ class MonitoringRecordsController extends Controller
 
         $headers = array(
             "Content-type" => "text/csv",
-            "Content-Disposition" => "attachment; filename=monitoring-records.csv",
+            "Content-Disposition" => "attachment; filename={$student_records[0]->student->user->name}-monitoring-records.csv",
             "Pragma" => "no-cache",
             "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
             "Expires" => "0"

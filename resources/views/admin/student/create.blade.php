@@ -19,9 +19,17 @@
                     </div>
                     <div class="card-body">
 
-                        <form action="{{ route('admin.student.store') }}" method="post">
+                        <form action="{{ route('admin.student.store') }}" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="mb-3">
+
+                                <div class="mb-3">
+                                  <label for="" class="form-label font-weight-normal">Student Image: </label>
+                                  <input type="file" class="" name="image" id="" placeholder="" aria-describedby="fileHelpId">
+                                  @error('image')
+                                        <p class="text-danger font-weight-bold">{{ $message }}</p>
+                                    @enderror
+                                </div>
 
                                 <div class="mb-3">
                                   <label for="" class="form-label font-weight-normal">Name:</label>
