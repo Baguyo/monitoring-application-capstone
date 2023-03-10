@@ -11,7 +11,7 @@
         
 
         
-        <a href="{{ route('admin.student.create') }}" class="btn btn-primary mb-3">Add Student</a>
+        <a href="{{ route('admin.student.create') }}" class="btn btn-info mb-3">Add Student</a>
 
         
         {{-- <div class="visible-print text-center">
@@ -71,7 +71,7 @@
                                         <td>
                                             
                                             <div class="">
-                                                <a href="{{ route('admin.student.edit', ['student'=>$item->student_id]) }}" class="btn btn-sm btn-primary"> <i class="fas fa-pen-fancy"></i> </a>
+                                                <a href="{{ route('admin.student.edit', ['student'=>$item->student_id]) }}" class="btn btn-sm btn-info"> <i class="fas fa-pen-fancy"></i> </a>
                                             </div>
                                             
                                         </td>

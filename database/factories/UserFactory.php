@@ -70,4 +70,16 @@ class UserFactory extends Factory
         });
     }
 
+    public function delete_user(){
+
+        return $this->state(function(){
+            return [
+                'name' => 'delete_me',
+                'email' => fake()->unique()->safeEmail(),
+                'type' => 0,
+                'created_at' => '2017-3-6',
+            ];  
+        } );
+    }
+
 }

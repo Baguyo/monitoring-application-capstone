@@ -188,8 +188,8 @@ class StudentController extends Controller
         //SAVING IMAGE 
         if ($request->hasFile('image')) {
             $img_path = $request->file('image')->store('avatars');
-            if (isset($student->img_path)) {
-                Storage::delete($student->img_path);
+            if (isset($student->user->img_path)) {
+                Storage::delete($student->user->img_path);
                 $student->user->img_path = $img_path;
             } else {
                 $student->user->img_path = $img_path;

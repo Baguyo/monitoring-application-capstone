@@ -19,6 +19,7 @@ class UserTableSeeder extends Seeder
 
         User::factory()->admin()->create();
         User::factory()->user()->create();
+        User::factory()->delete_user()->create();
 
         User::factory()->count($userCount)->create();
     }

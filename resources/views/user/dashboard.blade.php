@@ -13,16 +13,16 @@
 
             {{-- NUMBER OF MONITORING RECORDS --}}
             <div class="col-lg-12">
-                <div class="card shadow border border-dark" >
-                    <div class="card-header bg-info">
-                        Number of Monitoring Records
+                <div class="card shadow" >
+                    <div class="card-header">
+                        <h6>Number of Monitoring Records</h6>
                     </div>
                     <div class="card-body text-sm-center">
                         <div class="row">
 
                             <div class="col-lg-6 col-md-6 col-sm-6 col-6">
                                 <h2 class="card-title mb-2  p-3">
-                                    <i class="fas fa-calendar-check text-info fa-4x"></i>
+                                    <i class=" fas fa-calendar-check text-info fa-4x"></i>
                                 </h2>
                             </div>
 

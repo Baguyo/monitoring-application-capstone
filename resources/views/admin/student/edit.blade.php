@@ -14,7 +14,7 @@
         <div class="row">
             <div class="col-lg-8">
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header bg-info">
                         <h4 class="font-weight-normal">Edit student form</h4>
                     </div>
                     <div class="card-body">
@@ -95,7 +95,7 @@
                                 </div>
 
 
-                                <button type="submit" class="btn btn-primary mt-3">Submit</button>
+                                <button type="submit" class="btn btn-info mt-3">Submit</button>
                             </div>
                         </form>
                     </div>

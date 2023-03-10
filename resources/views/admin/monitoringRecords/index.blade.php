@@ -52,7 +52,7 @@
 
                       <div class="col">
                         <label for="" class="invisible">Filter</label>
-                        <input type="submit" value="Filter" class="btn btn-primary form-control">
+                        <input type="submit" value="Filter" class="btn btn-info form-control">
                       </div>
 
                     </div>

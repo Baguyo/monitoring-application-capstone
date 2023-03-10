@@ -18,18 +18,21 @@
 }
 
 .sidebar  .nav-item .nav-link{
-    color:#fff;
+    /* color:#fff; */
+    color: #111;
+    
 
-    transition: all 0.9s ease;
     
 }
 .sidebar .nav-item .nav-link:hover{
-    color: #fff!important;
-    background:  linear-gradient(to top, #ff6767 , #b31837);
-    
+    /* color: #fff!important;
+    background:  linear-gradient(to top, #ff6767 , #b31837);    */
+    color: #fff;
+    background: #17A2B8;
 }
 
 .sidebar .nav-item .nav-link.active{
     /* background-color: #BB0C2F; */
-    background:  linear-gradient(to top, #ff6767 , #b31837);
+    color: #fff;
+    background: #17A2B8;;
 }

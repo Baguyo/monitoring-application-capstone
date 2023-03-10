@@ -29,7 +29,7 @@
         </div>
 
         <div class="scanner-container">
-          <button class="btn btn-primary switch-camera-mirror">
+          <button class="btn btn-info switch-camera-mirror">
             Mirror Camera</button>
           <div id="qr-reader" style="width: 600px; " class="mx-auto"></div>
         </div>
@@ -84,7 +84,7 @@
                         }
 
                         $('.name').html( "Name: " + response.student.user.name);
-                        var exist_student = new Audio(` {{ Storage::url('sounds/blue.mp3') }} `);
+                        var exist_student = new Audio(` {{ Storage::url('sounds/success.mp3') }} `);
                         exist_student.play();
                     }else{
                           $('.img-found').html(`<h3>Not found</h3>`);

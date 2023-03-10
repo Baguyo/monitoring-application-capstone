@@ -61,7 +61,7 @@
   
                                   <div class="mb-3">
                                     <label for="" class="form-label font-weight-normal">Password</label>
-                                    <input type="password" class="form-control  @error('password') is-invalid @enderror" name="password" id="" placeholder="">
+                                    <input type="password" class="form-control  @error('password') is-invalid @enderror" name="password" id="" placeholder=""> 
                                   </div>
   
                                   <div class="mb-3">
@@ -74,7 +74,7 @@
                                     <input type="time" class="form-control" name="time" id="" placeholder="">
                                  </div>
 
-                                <button type="submit" class="btn btn-primary mt-3">Submit</button>
+                                <button type="submit" class="btn btn-info mt-3">Submit</button>
                             </div>
                         </form>
                     </div>

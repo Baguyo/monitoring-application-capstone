@@ -16,9 +16,11 @@ class StudentFactory extends Factory
      */
     public function definition()
     {
-        return [            
+        return [
+            
             'student_number' => fake()->numerify('##########'),
             'contact_number' => '9754588991',
+            
         ];
     }
 }

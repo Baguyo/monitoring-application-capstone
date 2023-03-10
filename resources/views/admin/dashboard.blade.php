@@ -94,9 +94,9 @@
             {{-- TOTAL STUDENTS --}}
             <div class="col-lg-12">
 
-                <div class="card shadow text-primary border border-dark">
-                    <div class="card-header bg-info">
-                        Number of Students
+                <div class="card shadow">
+                    <div class="card-header">
+                        <h6>Number of Students</h6>
                     </div>
                     <div class="card-body text-sm-center">
                         <div class="row">
@@ -179,9 +179,9 @@
             <div class="col-lg-12">
 
                 {{-- <div class="card shadow text-white" style="background: linear-gradient(to bottom, #69a356 ,#2ee301)"> --}}
-                <div class="card shadow text-white border border-dark" >
-                    <div class="card-header bg-info">
-                        Number of Monitoring Records
+                <div class="card shadow " >
+                    <div class="card-header"  >
+                        <h6>Number of Monitoring Records</h6>
                     </div>
                     <div class="card-body text-sm-center">
                         <div class="row">

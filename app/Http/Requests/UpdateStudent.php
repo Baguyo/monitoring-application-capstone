@@ -25,8 +25,8 @@ class UpdateStudent extends FormRequest
     public function rules()
     {
         return [
-            'image' => "nullable|image|mimes:jpg,png,jpeg,gif,svg|max:5000",
-            'name' => 'bail|required|min:3',
+            'image' => "nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2000",
+            'name' => 'bail|required|regex:/(^[A-Za-z ]+$)+/|min:3',
             'password'=> 'confirmed',
             'contact_number'=>'bail|required|integer',
         ];

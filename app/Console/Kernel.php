@@ -3,10 +3,12 @@
 namespace App\Console;
 
 use App\Models\MonitoringRecord;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Storage;
 use SmsGateway24\SmsGateway24;
 
 class Kernel extends ConsoleKernel
@@ -139,7 +141,36 @@ class Kernel extends ConsoleKernel
             $responceArr = json_decode($server_output);
             echo $server_output;
         })->daily()->timezone('Asia/Singapore')->at(env('TIME_TO_SEND'));
+
+        $schedule->call(function(){
+            
+            
+            $year = (int)Carbon::now()->timezone('Asia/Singapore')->format('Y');
+
+            $all_users = User::where('type', 0)->get();
+            $all_users->each(function($user) use($year) {
+
+                if( $year - $user->created_at->year >= 3 ){
+                    // var_dump($user->student->qr_code->path);
+                    Storage::disk('public')->delete($user->student->qr_code->path);
+                    if($user->img_path){
+                        Storage::disk('public')->delete($user->img_path);
+                    }
+                    $user->delete();
+
+                    // var_dump('reach equal or greater than 3');
+                }
+
+            });
+
+            
+
+        })->everyMinute();
     }
+
+
+
+    
 
     /**
      * Register the commands for the application.
