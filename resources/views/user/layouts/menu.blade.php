@@ -1,20 +1,20 @@
 <!-- need to remove -->
 <li class="nav-item">
-    <a href="{{ route('user.dashboard') }}" class="nav-link {{ Request::is('user') ? 'active' : '' }}">
+    <a href="{{ route('user.dashboard') }}" class="custom nav-link {{ Request::is('user') ? 'active' : '' }}">
         <i class="nav-icon fas fa-home"></i>
         <p>Dashboard</p>
     </a>
 </li>
 
 <li class="nav-item">
-    <a href="{{ route('user.profile.edit', ['profile'=>auth()->user()->id]) }}" class="nav-link {{ request()->route()->named('user.profile*') ? 'active' : '' }}">
+    <a href="{{ route('user.profile.edit', ['profile'=>auth()->user()->id]) }}" class=" custom nav-link {{ request()->route()->named('user.profile*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-user"></i>
         <p>Profile</p>
     </a>
 </li>
 
 <li class="nav-item">
-    <a href="{{ route('user.records.index') }}" class="nav-link {{ request()->route()->named('user.records*') ? 'active' : '' }}">
+    <a href="{{ route('user.records.index') }}" class=" custom nav-link {{ request()->route()->named('user.records*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-clipboard"></i>
         <p>Monitoring records</p>
     </a>

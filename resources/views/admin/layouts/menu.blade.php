@@ -1,6 +1,6 @@
 <!-- need to remove -->
 <li class="nav-item">
-    <a href="{{ route('admin.dashboard') }}" class="nav-link {{ Request::is('admin_dashboard') ? 'active' : '' }}">
+    <a href="{{ route('admin.dashboard') }}" class="custom nav-link {{ Request::is('admin_dashboard') ? 'active' : '' }}">
         <i class="nav-icon fas fa-home"></i>
         <p>Dashboard</p>
     </a>
@@ -28,7 +28,7 @@
 </li> --}}
 
 <li class="nav-item">
-    <a href="{{ route('admin.student.index') }}" class="nav-link {{ request()->route()->named('admin.student*') ? 'active' : '' }}">
+    <a href="{{ route('admin.student.index') }}" class="custom nav-link  {{ request()->route()->named('admin.student*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-users"></i>
         <p>Students</p>
     </a>
@@ -36,21 +36,21 @@
 
 
 <li class="nav-item">
-    <a href="{{ route('admin.users.edit', ['user'=>Auth()->id()]) }}" class="nav-link {{ request()->route()->named('admin.users*') ? 'active' : '' }}">
+    <a href="{{ route('admin.users.edit', ['user'=>Auth()->id()]) }}" class="custom nav-link {{ request()->route()->named('admin.users*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-user-lock"></i>
         <p>Edit Administrator</p>
     </a>
 </li>
 
 <li class="nav-item">
-    <a href="{{ route('admin.scan') }}" class="nav-link {{ request()->route()->named('admin.scan*') ? 'active' : '' }}">
+    <a href="{{ route('admin.scan') }}" class="custom nav-link {{ request()->route()->named('admin.scan*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-qrcode"></i>
         <p>Scan QR Code</p>
     </a>
 </li>
 
 <li class="nav-item">
-    <a href="{{ route('admin.records.index') }}" class="nav-link {{ request()->route()->named('admin.records*') ? 'active' : '' }}">
+    <a href="{{ route('admin.records.index') }}" class="custom nav-link {{ request()->route()->named('admin.records*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-calendar-check"></i>
         <p>MS Records</p>
     </a>

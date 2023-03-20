@@ -13,26 +13,3 @@
 
 /* @import '../../node_modules/jquery-datatables-checkboxes/css/dataTables.checkboxes.css';  */
 
-.c-white{
-    color: #fff;
-}
-
-.sidebar  .nav-item .nav-link{
-    /* color:#fff; */
-    color: #111;
-    
-
-    
-}
-.sidebar .nav-item .nav-link:hover{
-    /* color: #fff!important;
-    background:  linear-gradient(to top, #ff6767 , #b31837);    */
-    color: #fff;
-    background: #17A2B8;
-}
-
-.sidebar .nav-item .nav-link.active{
-    /* background-color: #BB0C2F; */
-    color: #fff;
-    background: #17A2B8;;
-}
