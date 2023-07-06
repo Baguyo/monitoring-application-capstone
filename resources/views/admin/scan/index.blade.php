@@ -78,9 +78,9 @@
                         
                         if(!response.student.user.img_path){
                           // $('.student-image').attr('src', " {{ Storage::url('defaults/logo.jpg') }} ");
-                          $('.img-found').html(`<img src={{ Storage::url('defaults/logo.jpg') }} alt="">`);
+                          $('.img-found').html(`<img src={{ Storage::url('defaults/logo.jpg') }} alt="" class="img-fluid" height="128px" width="250px">`);
                         }else{
-                        $('.img-found').html(`<img src={{ Storage::url('${response.student.user.img_path}') }} alt="">`);
+                        $('.img-found').html(`<img src={{ Storage::url('${response.student.user.img_path}') }} alt="" class="img-fluid" height="128px" width="250px" >`);
                         }
 
                         $('.name').html( "Name: " + response.student.user.name);

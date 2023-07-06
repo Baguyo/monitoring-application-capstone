@@ -76,7 +76,7 @@
     <!-- Main Footer -->
     <footer class="main-footer">
         
-        <strong> &copy; 2022 FbcMonitoring. </strong> 
+        <strong> &copy; 2023 FbcMonitoring </strong> 
     </footer>
 </div>
 

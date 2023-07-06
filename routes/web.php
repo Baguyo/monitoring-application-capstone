@@ -20,9 +20,6 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::get('/demo', function(){
-    return view('demo.index');
-});
 
 
 
@@ -83,6 +80,7 @@ Route::group(['middleware'=> 'auth'], function(){
 
             //ADMINISTRATOR
             Route::as('admin')->resource('users', App\Http\Controllers\Admin\AdministratorController::class)->only(['edit','update', 'show']);
+            Route::as('admin')->post('br', [App\Http\Controllers\Admin\AdministratorController::class, 'brownOut'])->name('.brownout');
 
             //SCAN QR CODE
             Route::get('scan', [App\Http\Controllers\Admin\StudentController::class, 'scan'])->name('admin.scan');

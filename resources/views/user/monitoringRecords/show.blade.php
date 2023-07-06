@@ -35,7 +35,7 @@
     
                           <div class="col">
                             <label for="" class="invisible">Filter</label>
-                            <input type="submit" value="Filter" class="btn btn-primary form-control">
+                            <input type="submit" value="Filter" class="btn btn-info form-control">
                           </div>
 
                     </div>
@@ -62,7 +62,7 @@
                         
                         
                         
-                            <table class="table table-hover table-bordered table-responsive" id="monitoring-table">
+                            <table class="table table-hover table-bordered" id="monitoring-table">
                                 <thead>
                                     <tr>
                                         <th>Name</th>
@@ -85,16 +85,16 @@
                                 <tr>
                                     <td>{{ $item->student->user->name }}</td>
                                     <td>{{ $item->date }}</td>
-                                    <td>{{  ($item->first_in) ? date('h:i:A', strtotime($item->first_in)) : "" }}</td>
-                                    <td>{{  ($item->first_out) ? date('h:i:A', strtotime($item->first_out)) : ""  }}</td>
-                                    <td>{{  ($item->second_in) ? date('h:i:A', strtotime($item->second_in)) : "" }}</td>
-                                    <td>{{  ($item->second_out) ? date('h:i:A', strtotime($item->second_out)) : "" }}</td>
-                                    <td>{{  ($item->third_in) ? date('h:i:A', strtotime($item->third_in)) : "" }}</td>
-                                    <td>{{  ($item->third_out) ? date('h:i:A', strtotime($item->third_out)) : "" }}</td>
-                                    <td>{{  ($item->fourth_in) ? date('h:i:A', strtotime($item->fourth_in)) : "" }}</td>
-                                    <td>{{  ($item->fourth_out) ? date('h:i:A', strtotime($item->fourth_out)) : "" }}</td>
-                                    <td>{{  ($item->fifth_in) ? date('h:i:A', strtotime($item->fifth_in)) : "" }}</td>
-                                    <td>{{  ($item->fifth_out) ? date('h:i:A', strtotime($item->fifth_out)) : "" }}</td>
+                                    @monitoringRecord(['record'=>$item->first_in])@endmonitoringRecord
+                                    @monitoringRecord(['record'=>$item->first_out])@endmonitoringRecord
+                                    @monitoringRecord(['record'=>$item->second_in])@endmonitoringRecord
+                                    @monitoringRecord(['record'=>$item->second_out])@endmonitoringRecord
+                                    @monitoringRecord(['record'=>$item->third_in])@endmonitoringRecord
+                                    @monitoringRecord(['record'=>$item->third_out])@endmonitoringRecord
+                                    @monitoringRecord(['record'=>$item->fourth_in])@endmonitoringRecord
+                                    @monitoringRecord(['record'=>$item->fourth_out])@endmonitoringRecord
+                                    @monitoringRecord(['record'=>$item->fifth_in])@endmonitoringRecord
+                                    @monitoringRecord(['record'=>$item->fifth_out])@endmonitoringRecord
                                     
                                 </tr>   
                                 @empty

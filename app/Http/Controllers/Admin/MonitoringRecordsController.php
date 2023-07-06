@@ -92,7 +92,10 @@ class MonitoringRecordsController extends Controller
                                 )
                                 ->get();
                                 
-        $all_student = Student::with('user')->get();
+        $all_student =  Student::get()->sortBy(function($query){
+                                    return $query->user->name;
+                                 })
+                                 ->all();
 
         return view('admin.monitoringRecords.show', ['students'=>$all_student, 'records'=>$student_records]);
     }
@@ -128,16 +131,16 @@ class MonitoringRecordsController extends Controller
                 fputcsv($file, array(
                     $item->student->user->name, 
                     $item->date,
-                    ($item->first_in) ? date('h:i:A', strtotime($item->first_in)) : "",
-                    ($item->first_out) ? date('h:i:A', strtotime($item->first_out)) : "",
-                    ($item->second_in) ? date('h:i:A', strtotime($item->second_in)) : "",
-                    ($item->second_out) ? date('h:i:A', strtotime($item->second_out)) : "",
-                    ($item->third_in) ? date('h:i:A', strtotime($item->third_in)) : "",
-                    ($item->third_out) ? date('h:i:A', strtotime($item->third_out)) : "",
-                    ($item->fourth_in) ? date('h:i:A', strtotime($item->fourth_in)) : "",
-                    ($item->fourth_out) ? date('h:i:A', strtotime($item->fourth_out)) : "",
-                    ($item->fifth_in) ? date('h:i:A', strtotime($item->fifth_in)) : "",
-                    ($item->fifth_out) ? date('h:i:A', strtotime($item->fifth_out)) : "",
+                    $first_in = MonitoringRecord::convert_hours($item->first_in),
+                    $first_out = MonitoringRecord::convert_hours($item->first_out),
+                    $second_in = MonitoringRecord::convert_hours($item->second_in),
+                    $second_out = MonitoringRecord::convert_hours($item->second_out),
+                    $third_in = MonitoringRecord::convert_hours($item->third_in),
+                    $third_out = MonitoringRecord::convert_hours($item->third_out),
+                    $fourth_in = MonitoringRecord::convert_hours($item->fourth_in),
+                    $fourth_out = MonitoringRecord::convert_hours($item->fourth_out),
+                    $fifth_in = MonitoringRecord::convert_hours($item->fifth_in),
+                    $fifth_out = MonitoringRecord::convert_hours($item->fifth_out),
                 ) );
             }
             fclose($file);

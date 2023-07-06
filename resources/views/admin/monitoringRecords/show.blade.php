@@ -53,7 +53,7 @@
 
                       <div class="col">
                         <label for="" class="invisible">Filter</label>
-                        <input type="submit" value="Filter" class="btn btn-primary form-control">
+                        <input type="submit" value="Filter" class="btn btn-info form-control">
                       </div>
 
                     </div>
@@ -63,24 +63,26 @@
 
         <div class="card">
             <div class="card-body">
-                <div class="table-responsive-lg mt-4">
+                <div class="table-responsive">
                     
                     
 
                     <h5>List of student monitoring record</h5>
 
                     {{-- <form action="{{ route('admin.records.export',['id'=>'asd', 'date-from'=> 'das', 'date-to'=>'asd'] ) }}" method="" class="mb-2">
-                        <input type="submit" value="Export as CSV" class="btn btn-primary">
+                        <input type="submit" value="Export as CSV" class="btn btn-info">
                     </form> --}}
 
-                    <a href="{{ route('admin.records.export',['sid'=>request('student')."+".request('date-from')."+".request('date-to')   ] ) }}"
-                        class="btn btn-primary my-2">
-                        Export as CSV
-                    </a>
+                    @if ($records->count() > 0)
+                        <a href="{{ route('admin.records.export', ['sid' => request('student') . '+' . request('date-from') . '+' . request('date-to')]) }}"
+                            class="btn btn-info my-2">
+                            Export as CSV
+                        </a>
+                    @endif
                         
                         
                         
-                            <table class="table table-hover table-bordered table-responsive" id="monitoring-table">
+                            <table class="table table-hover table-bordered " id="monitoring-table">
                                 <thead>
                                     <tr>
                                         <th>Name</th>
@@ -103,20 +105,20 @@
                                 <tr>
                                     <td>{{ $item->user_name }}</td>
                                     <td>{{ $item->date }}</td>
-                                    <td>{{  ($item->first_in) ? date('h:i:A', strtotime($item->first_in)) : "" }}</td>
-                                    <td>{{  ($item->first_out) ? date('h:i:A', strtotime($item->first_out)) : ""  }}</td>
-                                    <td>{{  ($item->second_in) ? date('h:i:A', strtotime($item->second_in)) : "" }}</td>
-                                    <td>{{  ($item->second_out) ? date('h:i:A', strtotime($item->second_out)) : "" }}</td>
-                                    <td>{{  ($item->third_in) ? date('h:i:A', strtotime($item->third_in)) : "" }}</td>
-                                    <td>{{  ($item->third_out) ? date('h:i:A', strtotime($item->third_out)) : "" }}</td>
-                                    <td>{{  ($item->fourth_in) ? date('h:i:A', strtotime($item->fourth_in)) : "" }}</td>
-                                    <td>{{  ($item->fourth_out) ? date('h:i:A', strtotime($item->fourth_out)) : "" }}</td>
-                                    <td>{{  ($item->fifth_in) ? date('h:i:A', strtotime($item->fifth_in)) : "" }}</td>
-                                    <td>{{  ($item->fifth_out) ? date('h:i:A', strtotime($item->fifth_out)) : "" }}</td>
+				@monitoringRecord(['record'=>$item->first_in])@endmonitoringRecord
+                                @monitoringRecord(['record'=>$item->first_out])@endmonitoringRecord
+                                @monitoringRecord(['record'=>$item->second_in])@endmonitoringRecord
+                                @monitoringRecord(['record'=>$item->second_out])@endmonitoringRecord
+                                @monitoringRecord(['record'=>$item->third_in])@endmonitoringRecord
+                                @monitoringRecord(['record'=>$item->third_out])@endmonitoringRecord
+                                @monitoringRecord(['record'=>$item->fourth_in])@endmonitoringRecord
+                                @monitoringRecord(['record'=>$item->fourth_out])@endmonitoringRecord
+                                @monitoringRecord(['record'=>$item->fifth_in])@endmonitoringRecord
+                                @monitoringRecord(['record'=>$item->fifth_out])@endmonitoringRecord
                                     
                                 </tr>   
                                 @empty
-                                    <td colspan="7" class="text-center">No record for student's selected date range</td>
+                                    <td colspan="12" class="text-center">No record for student's selected date range</td>
                                 @endforelse
                                 
                             </table>

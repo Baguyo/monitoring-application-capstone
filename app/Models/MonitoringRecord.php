@@ -27,9 +27,12 @@ class MonitoringRecord extends Model
     }
 
     public static function convert_hours($value){
-        if($value){
+        if($value == '04:00:00'){
+            return 'Brownout';
+        }else if ($value != null){
             return date('h:i:s a', strtotime($value));
-        }else{
+        }
+        else{
             return '';
         }
     }

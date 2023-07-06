@@ -28,7 +28,7 @@ class StoreStudent extends FormRequest
             'name' => 'bail|required|regex:/(^[A-Za-z ]+$)+/|min:3',
             'email' => 'bail|required|min:3|email|unique:users',
             'password'=> 'bail|required|confirmed|min:6',
-            'student_number' => 'bail|required|min:3|integer|unique:students',
+            'student_number' => 'bail|required|min:3|unique:students',
             // 'guardian'=> 'bail|required|min:5|unique:students',
             // 'address' => 'bail|required|min:4',
             'contact_number'=>'bail|required|integer',

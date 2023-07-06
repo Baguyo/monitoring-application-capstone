@@ -12,7 +12,7 @@ Password: {{ $password }}
 @endcomponent
 
 Please change your password right after you login
-@component('mail::button', ['url' => route('login')])
+@component('mail::button', ['url' => route('home')])
 Login
 @endcomponent
 

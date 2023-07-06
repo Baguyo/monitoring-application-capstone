@@ -1,4 +1,4 @@
-<aside class="main-sidebar elevation-4">
+<aside class="main-sidebar elevation-4 bg-light">
     <a href="{{ route('home') }}" class="brand-link">
         <img src="{{ Storage::url('defaults/logo.png') }}"
              alt="AdminLTE Logo"

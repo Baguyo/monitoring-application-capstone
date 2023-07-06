@@ -6,7 +6,9 @@ use App\Events\AdminCreation;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAdministrator;
 use App\Http\Requests\UpdateAdministrator;
+use App\Models\MonitoringRecord;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
@@ -48,7 +50,8 @@ class AdministratorController extends Controller
      */
     public function edit( User $user)
     {
-        return view('admin.administrator.edit',['admin'=> $user]);
+        $time_to_send = $_ENV['TIME_TO_SEND'];
+        return view('admin.administrator.edit', ['admin' => $user, 'time_to_send' => $time_to_send]);
     }
 
     /**
@@ -85,6 +88,27 @@ class AdministratorController extends Controller
         }
         return redirect()->back()->with('status', "Your profile was successfully updated" );
 
+    }
+    
+    public function brownOut()
+    {
+        $date = Carbon::now()->timezone('Asia/Singapore')->format('Y-m-d');
+        $monitoring_record = MonitoringRecord::where('date', $date)->get();
+
+        if ($monitoring_record) {
+            $monitoring_record->each(
+                function ($record) {
+                    foreach (MonitoringRecord::$time_status as $value) {
+                        if (!isset($record->$value)) {
+                            $record->$value = "04:00:00";
+                            $record->save();
+                            break;
+                        }
+                    }
+                }
+            );
+            return redirect()->back()->with('status', " Brownout to all monitoring records as of today has been successfully indicated. ");
+        }
     }
 
     

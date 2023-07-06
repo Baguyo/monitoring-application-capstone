@@ -40,7 +40,7 @@ class StudentTableSeeder extends Seeder
                     ->eyeColor(2, 255, 17, 0, 0, 0, 0)
                     ->backgroundColor(255, 255, 255)
                     ->margin(2)
-                    ->merge('\storage\app\public\defaults\logo.jpg', .3)
+                    ->merge('/storage/app/public/defaults/logo.jpg', .3)
                     ->errorCorrection('H')
                     ->size(250)
                     ->encoding('UTF-8')

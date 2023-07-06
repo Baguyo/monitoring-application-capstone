@@ -71,7 +71,7 @@
 
                                   <div class="mb-3">
                                     <label for="" class="form-label font-weight-normal">Student Number</label>
-                                    <input type="number" value="{{ old('student_number',$student->student_number) }}"
+                                    <input type="text" value="{{ old('student_number',$student->student_number) }}"
                                      class="form-control  @error('student_number') is-invalid @enderror" name="student_number" id="" placeholder="">
                                     @error('student_number')
                                           <p class="text-danger font-weight-bold">{{ $message }}</p>

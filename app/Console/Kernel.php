@@ -32,24 +32,7 @@ class Kernel extends ConsoleKernel
 
             /* Required fields */
             $paramsArr['token'] = env('SMS_GATE_AWAY_API');
-            $paramsArr['smsdata'] = [
-                // [
-                //     "sendto" => "+49 157 52982212",
-                //     "body" => "test message 1",
-                //     "device_id" => "260",
-                //     "sim" => 0,
-                //     "timetosend" => "2019-07-01 23:50:00",
-                //     "urgent" => "1"
-
-                // ], [
-                //     "sendto" => "+49 157 52982212",
-                //     "body" => "test message 2 ",
-                //     "device_id" => "260",
-                //     "sim" => 0,
-                //     "timetosend" => "2019-07-01 23:50:00",
-                //     "urgent" => "1"
-                // ]
-            ];
+            $paramsArr['smsdata'] = [];
 
 
             $date = Carbon::now()->timezone('Asia/Singapore')->format('Y-m-d');
@@ -72,11 +55,27 @@ class Kernel extends ConsoleKernel
 
 
                 $message = " Full report of {$monitoring->student->user->name} monitoring records as of today. \n";
-                $message = $message . " {$first_in} " . " - " . " {$first_out} \n";
-                $message = $message . " {$second_in}" . " - " . " {$second_out} \n";
-                $message = $message . " {$third_in} " . " - " . "{$third_out} \n";
-                $message = $message . " {$fourth_in}" . " - " . " {$fourth_out} \n";
-                $message = $message . " {$fifth_in} " . " - " . "{$fifth_out} \n";
+                
+                if($first_in != ''){
+                    $message = $message . " {$first_in} " . " - " . " {$first_out} \n";
+                }
+
+                if($second_in != ''){
+                    $message = $message . " {$second_in}" . " - " . " {$second_out} \n";
+                }
+                
+                if($third_in != ''){
+                    $message = $message . " {$third_in} " . " - " . "{$third_out} \n";
+                }
+                
+                if($fourth_in != ''){
+                    $message = $message . " {$fourth_in}" . " - " . " {$fourth_out} \n";
+                }
+                
+                if($fifth_in != ''){
+                    $message = $message . " {$fifth_in} " . " - " . "{$fifth_out} \n";
+                }
+
 
                 $message = $message . "Unbalanced monitoring report cause of no internet connection or no electricity at the School campus.";
 

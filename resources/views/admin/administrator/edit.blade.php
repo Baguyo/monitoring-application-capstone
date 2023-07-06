@@ -21,6 +21,12 @@
 
                 <img src={{ ($admin->img_path) ? $admin->showImage() : Storage::url('defaults/logo.jpg') }} 
                 alt="" class="rounded-circle img-fluid">
+                <div class="mt-4">
+                    <form action="{{ route('admin.brownout') }}" method="post" id="brownout">
+                        @csrf
+                        <input type="submit" value="Indicate Brownout" class="btn btn-outline-info">
+                    </form>
+                </div>
 
             </div>
             <div class="col-lg-8">
@@ -34,7 +40,7 @@
                             @method("PUT")
                             @csrf
 
-                            @validationError @endvalidationError
+                            
 
                                 {{-- <div class="mb-3">
                                   <label for="" class="form-label font-weight-normal">Choose image file:</label>
@@ -62,6 +68,9 @@
                                   <div class="mb-3">
                                     <label for="" class="form-label font-weight-normal">Password</label>
                                     <input type="password" class="form-control  @error('password') is-invalid @enderror" name="password" id="" placeholder=""> 
+                                    @error('password')
+                                        <p class="text-danger font-weight-bold">{{ $message }}</p>
+                                    @enderror
                                   </div>
   
                                   <div class="mb-3">
@@ -72,6 +81,7 @@
                                    <div class="mb-3">
                                     <label for="" class="form-label font-weight-normal">Time to send SMS</label>
                                     <input type="time" class="form-control" name="time" id="" placeholder="">
+                                    <small >Time to send: {{ $time_to_send }}</small>
                                  </div>
 
                                 <button type="submit" class="btn btn-info mt-3">Submit</button>
@@ -85,6 +95,24 @@
 
 
     </div>
+    <script type="module">
+        $('#brownout').submit(function (e) { 
+            e.preventDefault();
+            Swal.fire({
+                title: 'Are you sure you want to submit this form ?',
+                text: "This will indicate 'Brownout' to all student monitoring records as of today. ",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.submit();
+                }
+            })
+        });
+    </script>
 
     
 @endsection

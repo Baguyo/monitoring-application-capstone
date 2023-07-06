@@ -41,5 +41,6 @@ class AppServiceProvider extends ServiceProvider
         
         Blade::aliasComponent('components.page-header', 'pageHeader');
         Blade::aliasComponent('components.validation-error', 'validationError');
+        Blade::aliasComponent('components.monitoring-records', 'monitoringRecord');
     }
 }
